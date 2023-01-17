@@ -3,12 +3,17 @@
 ...
 
 ## Setup
-...
+Enter your project directory
 ```
-sudo ...
+cd <project_path>
+```
+Install required packages
+```
+pip install requirements.txt
 ```
 
 ## Usage
+TODO: ADD FLAGS
 ...
 ```
 sudo ...
