@@ -3,18 +3,23 @@
 ...
 
 ## Setup
-Enter your project directory
+
 ```
 cd <project_path>
+# JESZCZE NIE WIADOMO CZY TRZEBA
+python3 -m venv .venv
+#
+sudo pip install -r requirements.txt
 ```
-Install required packages
+
+Add root privilages
 ```
-pip install requirements.txt
+sudo chmod -R 777 .
 ```
 
 ## Usage
 TODO: ADD FLAGS
 ...
 ```
-sudo ...
+sudo ./main.py
 ```

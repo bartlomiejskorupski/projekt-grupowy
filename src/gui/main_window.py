@@ -1,5 +1,5 @@
 from guizero import App
-from database.local_context import LocalContext
+from src.database.local_context import LocalContext
 
 class MainWindow:
   TITLE = 'Projekt Grupowy'

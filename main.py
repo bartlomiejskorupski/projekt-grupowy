@@ -1,4 +1,5 @@
-from gui.main_window import MainWindow
+#!/usr/bin/python3
+from src.gui.main_window import MainWindow
 
 def main():
   window = MainWindow()
