@@ -2,7 +2,8 @@ import logging
 from os.path import join
 from env import DATA_FOLDER_PATH
 
-def getLogger(module_name):
+def getLogger(module_name: str) -> logging.Logger:
+  """Configures and returns a logger for given module"""
   logger = logging.getLogger(module_name)
   logger.setLevel(logging.DEBUG)
 

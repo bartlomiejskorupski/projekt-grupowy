@@ -1,7 +1,9 @@
 import sqlite3
 import os
 from env import DATA_FOLDER_PATH
-import logger
+from src.model.reading import Reading
+
+import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 
@@ -16,9 +18,12 @@ class LocalContext:
     self.db_file_path = os.path.join(DATA_FOLDER_PATH, self.DB_FILENAME)
     self.connection = self.create_connection()
     self.create_reading_table()
-    
+  
+  def __del__(self):
+    LOG.debug('Closing database connection')
+    self.connection.close()
 
-  def create_connection(self):
+  def create_connection(self) -> sqlite3.Connection:
     LOG.info('Connecting to database: ' + self.db_file_path)
     connection = None
     try:
@@ -31,7 +36,7 @@ class LocalContext:
     LOG.info('Creating reading table')
     CREATE_READING_TABLE_SQL = """
       CREATE TABLE IF NOT EXISTS readings (
-        id INT NOT NULL PRIMARY KEY,
+        id integer PRIMARY KEY,
         "date" DATETIME NOT NULL,
         value float NOT NULL
       );
@@ -42,7 +47,11 @@ class LocalContext:
     except sqlite3.Error as e:
       LOG.error(e)
   
-  def save_reading(value, date):
-    # TODO: Implement
-    pass
+  def save_reading(self, reading: Reading) -> int:
+    sql = 'INSERT INTO readings("date", value) VALUES (?,?)'
+    LOG.debug('Executing query {sql} with {reading}')
+    cur = self.connection.cursor()
+    cur.execute(sql, (reading.date.strftime('%Y-%m-%d %H:%M:%S.%f'), reading.value))
+    self.connection.commit()
+    return cur.lastrowid
 
