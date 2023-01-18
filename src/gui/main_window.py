@@ -1,5 +1,7 @@
 from guizero import App
 from src.database.local_context import LocalContext
+import logger
+LOG = logger.getLogger(__name__)
 
 class MainWindow:
   TITLE = 'Projekt Grupowy'
@@ -14,11 +16,11 @@ class MainWindow:
       layout='grid')
 
     # init components
+    LOG.debug('Initializing components')
 
-    self.init_db_context()
-
-    self.app.display()
-
-  def init_db_context(self):
     self.db_context = LocalContext()
+
+    LOG.debug('Application started')
+    self.app.display()
+  
   
