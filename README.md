@@ -2,10 +2,22 @@
 ## Description
 ...
 
+## Requirements
+Update Python to version 3.11
+```
+cd ~/Downloads
+wget https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz
+tar -zxvf Python-3.11.1.tgz
+cd Python-3.11.1
+./configure --enable-optimizations
+sudo make altinstall
+cd /usr/bin
+sudo rm python
+sudo ln -s /usr/local/bin/python3.11 python
+```
 ## Setup
 
 ```
-cd <project_path>
 pip install -r requirements.txt
 ```
 
