@@ -10,7 +10,10 @@ class SensorReader:
     pass
 
   def getTemperatureReading(self) -> float:
-    return (random()*5.0)+14
+    return (random()*5.0)+18
 
   def getPressureReading(self) -> float:
-    return (random()*2.0)+10
+    return 1.0
+
+  def getSoundReading(self) -> float:
+    return 2.0
