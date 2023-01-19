@@ -31,5 +31,5 @@ sudo chmod -R 777 /var/lib/groupproject/
 TODO: ADD FLAGS
 ...
 ```
-sudo ./main.py
+python3 ./main.py
 ```
