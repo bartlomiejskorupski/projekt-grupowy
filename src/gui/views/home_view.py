@@ -11,7 +11,7 @@ class HomeView:
   sensor_reader: SensorReader
   db_context: LocalContext
 
-  READING_DELAY = 3000
+  READING_DELAY = 1000
 
   container: Box
   temperature_text: Text
