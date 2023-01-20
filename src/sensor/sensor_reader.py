@@ -8,9 +8,6 @@ except ModuleNotFoundError as e:
   LOG.warning('Adafruit_DHT module not found! Using fake one.')
   import src.misc.fake_dht as DHT
 
-
-# TODO: Implement get reading methods
-
 class SensorReader:
 
   def __init__(self):
@@ -24,4 +21,5 @@ class SensorReader:
     return (0.0, temp)
 
   def getSoundReading(self) -> float:
+    # TODO: Implement method
     return 0.0
