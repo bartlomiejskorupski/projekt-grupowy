@@ -15,7 +15,7 @@ class HomeView:
 
   container: Box
   temperature_text: Text
-  pressure_text: Text
+  humidity_text: Text
   sound_text: Text
 
   def __init__(self, main_window):
@@ -40,32 +40,27 @@ class HomeView:
       align='top',
       width='fill',
       height='fill')
-    self.temperature_text.repeat(self.READING_DELAY, function=self.update_temperature_text)
-    self.pressure_text = Text(
+    self.humidity_text = Text(
       self.container,
-      text='Press.: 0.0kPa',
+      text='Humid.: 0.00%',
       size=40,
       align='top',
       width='fill',
       height='fill')
-    self.pressure_text.repeat(self.READING_DELAY, function=self.update_pressure_text)
     self.sound_text = Text(
       self.container,
-      text='Sound: 0.0dB',
+      text='Sound: 0.00dB',
       size=40,
       align='top',
       width='fill',
       height='fill')
-    self.sound_text.repeat(self.READING_DELAY, function=self.update_sound_text)
+    self.container.repeat(self.READING_DELAY, function=self.update_temperature_and_humidity_text)
 
-  def update_temperature_text(self):
-    reading = self.sensor_reader.getTemperatureReading()
-    self.db_context.save_reading(Reading(datetime.now(), reading))
-    self.temperature_text.value = 'Temp.: {:.2f}\u00B0C'.format(reading)
-
-  def update_pressure_text(self):
-    reading = self.sensor_reader.getPressureReading()
-    self.pressure_text.value = 'Press.: {:.2f}kPa'.format(reading)
+  def update_temperature_and_humidity_text(self):
+    humidity, temperature = self.sensor_reader.getHumidityAndTemperatureReading()
+    self.db_context.save_reading(Reading(datetime.now(), temperature))
+    self.temperature_text.value = 'Temp.: {:.2f}\u00B0C'.format(temperature)
+    self.humidity_text.value = 'Humid.: {:.2f}%'.format(humidity)
 
   def update_sound_text(self):
     reading = self.sensor_reader.getSoundReading()
