@@ -49,7 +49,7 @@ class LocalContext:
   
   def save_reading(self, reading: Reading) -> int:
     sql = 'INSERT INTO readings("date", value) VALUES (?,?)'
-    LOG.debug('Executing query {sql} with {reading}')
+    LOG.debug('Executing query ' + sql + ' with ' + str(reading))
     cur = self.connection.cursor()
     cur.execute(sql, (reading.date.strftime('%Y-%m-%d %H:%M:%S.%f'), reading.value))
     self.connection.commit()

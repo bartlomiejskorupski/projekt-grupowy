@@ -1,4 +1,3 @@
 #!/bin/bash
-sudo mkdir /var/lib/groupproject
-sudo chmod 777 /var/lib/groupproject
-pip install -r requirements.txt
+sudo mkdir /var/lib/sensormanager
+sudo chmod -R 777 /var/lib/sensormanager

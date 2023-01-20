@@ -1,11 +1,15 @@
+from datetime import datetime
 from guizero import App, Box, Text, PushButton
+from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
+from src.model.reading import Reading
 from src.misc.utils import addPadding
 from src.sensor.sensor_reader import SensorReader
 
 class HomeView:
   main_window = None
   sensor_reader: SensorReader
+  db_context: LocalContext
 
   READING_DELAY = 3000
 
@@ -16,7 +20,8 @@ class HomeView:
 
   def __init__(self, main_window):
     self.main_window = main_window
-    self.sensor_reader = main_window.sensor_reader
+    self.sensor_reader = SensorReader()
+    self.db_context = self.main_window.db_context
 
     self.container = Box(
       self.main_window.app,
@@ -55,6 +60,7 @@ class HomeView:
 
   def update_temperature_text(self):
     reading = self.sensor_reader.getTemperatureReading()
+    self.db_context.save_reading(Reading(datetime.now(), reading))
     self.temperature_text.value = 'Temp.: {:.2f}\u00B0C'.format(reading)
 
   def update_pressure_text(self):

@@ -12,12 +12,12 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 class MainWindow:
-  sensor_reader: SensorReader
-
   WIDTH = 1000
   HEIGHT = 1000
 
   app: App
+  db_context: LocalContext
+
   top_panel: TopPanel
   side_panel: SidePanel
   home_view: HomeView
@@ -34,7 +34,6 @@ class MainWindow:
     self.app.when_key_pressed = self.key_pressed
     self.app.when_closed
 
-    self.sensor_reader = SensorReader()
     self.db_context = LocalContext()
 
     # init components

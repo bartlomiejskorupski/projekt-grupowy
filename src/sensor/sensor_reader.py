@@ -13,7 +13,7 @@ class SensorReader:
     return (random()*5.0)+18
 
   def getPressureReading(self) -> float:
-    return 1.0
+    return 0.0
 
   def getSoundReading(self) -> float:
-    return 2.0
+    return 0.0
