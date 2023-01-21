@@ -23,6 +23,9 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+Running the application
 ```
-python3 main.py
+python3 main.py [options]
 ```
+Options:
+- --debug-border - show box borders

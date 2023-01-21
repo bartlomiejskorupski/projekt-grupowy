@@ -1,17 +1,11 @@
-from datetime import datetime
 from guizero import App, Box, Text, PushButton
 from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
-from src.model.reading import Reading
 from src.misc.utils import addPadding
-from src.sensor.sensor_reader import SensorReader
 
 class HomeView:
   main_window = None
-  sensor_reader: SensorReader
   db_context: LocalContext
-
-  READING_DELAY = 1000
 
   container: Box
   temperature_text: Text
@@ -20,7 +14,6 @@ class HomeView:
 
   def __init__(self, main_window):
     self.main_window = main_window
-    self.sensor_reader = SensorReader()
     self.db_context = self.main_window.db_context
 
     self.container = Box(
@@ -54,15 +47,8 @@ class HomeView:
       align='top',
       width='fill',
       height='fill')
-    self.container.repeat(self.READING_DELAY, function=self.update_temperature_and_humidity_text)
 
-  def update_temperature_and_humidity_text(self):
-    humidity, temperature = self.sensor_reader.getHumidityAndTemperatureReading()
-    self.db_context.save_reading(Reading(datetime.now(), temperature))
-    self.temperature_text.value = 'Temp.: {:.2f}\u00B0C'.format(temperature)
-    self.humidity_text.value = 'Humid.: {:.2f}%'.format(humidity)
-
-  def update_sound_text(self):
-    reading = self.sensor_reader.getSoundReading()
-    self.sound_text.value = 'Sound: {:.2f}dB'.format(reading)
-
+  def update_reading_texts(self, temperature, humidity, sound):
+    self.temperature_text.value = f'Temp.: {temperature:.2f}\u00B0C'
+    self.humidity_text.value = f'Humid.: {humidity:.2f}%'
+    self.sound_text.value = f'Sound: {sound:.2f}dB'
