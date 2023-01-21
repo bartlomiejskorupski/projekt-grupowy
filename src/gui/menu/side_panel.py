@@ -3,15 +3,17 @@ from env import APP_VERSION, DEBUG_BORDER
 from src.misc.utils import getTimeString, addPadding
 
 class SidePanel:
+  main_window = None
   app: App
   container: Box
   exit_button: PushButton
 
-  def __init__(self, app: App):
-    self.app = app
+  def __init__(self, main_window):
+    self.main_window = main_window
+    self.app = self.main_window.app
 
     self.container = Box(
-      app,
+      self.app,
       layout='auto',
       align='left',
       height='fill',
@@ -38,4 +40,4 @@ class SidePanel:
 
   def exit_button_click(self):
     if yesno('Exit', 'Are you sure you want to exit?'):
-      self.app.destroy()
+      self.main_window.close_app()
