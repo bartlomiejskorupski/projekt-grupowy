@@ -6,7 +6,7 @@ System monitorujący na bazie komputera Raspberry Pi
 
 **Components**:
 - High-Precision AD/DA Board
-- AM2302 sensor (connections: + to 3V3, - to GND, OUT to GPIO4)
+- AM2302 sensor (connections: + to 3V3, - to GND, OUT to GPIO16)
 - 3.5inch RPi LCD (A)
 
 **Operating system**: Raspberry Pi OS with desktop 32-bit
