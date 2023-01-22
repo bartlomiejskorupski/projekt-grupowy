@@ -26,7 +26,7 @@ class SensorReader(Thread):
     Thread.__init__(self)
     self.daemon = True
     self.sensor = DHT.DHT22
-    self.pin = 4
+    self.pin = 16
     self.running = True
     self.e = Event()
     self.event_queue = event_queue

@@ -62,6 +62,7 @@ class MainWindow:
         if e.event_type == AppEventType.SENSOR_READING_STARTED:
           pass
         elif e.event_type == AppEventType.SENSOR_READING_FINISHED:
+          LOG.debug(f'Temp: {e.data["temperature"]}')
           self.db_context.save_reading(Reading(e.data['datetime'], e.data['temperature']))
           self.home_view.update_reading_texts(e.data['temperature'], e.data['humidity'], e.data['sound'])
       except Empty:

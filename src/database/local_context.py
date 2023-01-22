@@ -39,9 +39,9 @@ class LocalContext:
     LOG.debug('Creating reading table')
     CREATE_READING_TABLE_SQL = """
       CREATE TABLE IF NOT EXISTS readings (
-        id integer PRIMARY KEY,
+        id INTEGER PRIMARY KEY,
         "date" DATETIME NOT NULL,
-        value float NOT NULL
+        value REAL NOT NULL
       );
     """
     try:

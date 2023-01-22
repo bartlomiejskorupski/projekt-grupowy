@@ -7,6 +7,7 @@ System monitorujący na bazie komputera Raspberry Pi
 **Components**:
 - High-Precision AD/DA Board
 - AM2302 sensor (connections: + to 3V3, - to GND, OUT to GPIO4)
+- 3.5inch RPi LCD (A)
 
 **Operating system**: Raspberry Pi OS with desktop 32-bit
 
@@ -21,6 +22,14 @@ sudo chmod -R 777 .
 
 pip install -r requirements.txt
 ```
+LCD setup
+> https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
+
+Changing display resolution to 480x320
+> https://forums.raspberrypi.com/viewtopic.php?t=5851
+
+Calibrate the touch screen
+> https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
 
 ## Usage
 Running the application
