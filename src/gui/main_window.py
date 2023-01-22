@@ -64,7 +64,10 @@ class MainWindow:
           self.home_view.reading_started()
         elif e.event_type == AppEventType.SENSOR_READING_FINISHED:
           temp, humid, sound, date = e.data['temperature'], e.data['humidity'], e.data['sound'], e.data['datetime']
-          if temp is not None:
+          if temp is None:
+            LOG.warning('Reading failed after 15 tries...')
+          else:
+            LOG.debug(f'Measured temperature: {temp}')
             self.db_context.save_reading(Reading(date, temp))
           self.home_view.update_reading_texts(temp, humid, sound, self.READING_DELAY)
       except Empty:
