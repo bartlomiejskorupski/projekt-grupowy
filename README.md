@@ -29,3 +29,4 @@ python3 main.py [options]
 ```
 Options:
 - --debug-border - show box borders
+- --full-screen - open in full screen mode

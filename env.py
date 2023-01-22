@@ -8,3 +8,4 @@ WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 
 DEBUG_BORDER = '--debug-border' in sys.argv
+FULL_SCREEN = '--full-screen' in sys.argv

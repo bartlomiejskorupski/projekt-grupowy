@@ -15,7 +15,8 @@ class TopPanel:
       app,
       layout='auto',
       align='top',
-      width='fill')
+      width='fill',
+      border=DEBUG_BORDER)
     self.container.bg = '#282828'
 
     addPadding(self.container, 20)

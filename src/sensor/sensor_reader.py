@@ -34,11 +34,13 @@ class SensorReader(Thread):
 
   def run(self):
     while True:
+      LOG.debug('Reading started...')
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_STARTED, {}))
 
       humidity, temperature = self.getHumidityAndTemperatureReading()
       sound = self.getSoundReading()
 
+      LOG.debug('Reading finished.')
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_FINISHED, {
         'temperature': temperature,
         'humidity': humidity,
@@ -51,6 +53,7 @@ class SensorReader(Thread):
         break
 
   def stop(self):
+    LOG.debug('Sensor thread stopping...')
     self.running = False
     self.e.set()
 
