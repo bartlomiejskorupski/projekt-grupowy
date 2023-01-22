@@ -29,8 +29,8 @@ class LocalContext:
     LOG.info('Connecting to database: ' + self.db_file_path)
     connection = None
     try:
-      # check_same_thread=False - ghetto workaround
-      connection = sqlite3.connect(self.db_file_path, check_same_thread=False)
+      # check_same_thread=False - ghetto workaround for threading problems
+      connection = sqlite3.connect(self.db_file_path, check_same_thread=True)
     except sqlite3.Error as e:
       LOG.error(e)
     return connection
@@ -52,7 +52,7 @@ class LocalContext:
   
   def save_reading(self, reading: Reading) -> int:
     sql = 'INSERT INTO readings("date", value) VALUES (?,?)'
-    #LOG.debug('Executing query ' + sql + ' with ' + str(reading))
+    # LOG.debug('Executing query ' + sql + ' with ' + str(reading))
     cur = self.connection.cursor()
     cur.execute(sql, (reading.date.strftime('%Y-%m-%d %H:%M:%S.%f'), reading.value))
     self.connection.commit()
