@@ -9,7 +9,7 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 try:
-  import Adafruit_DHT as DHT
+  import Adafruit_DHT as DHTa
 except ModuleNotFoundError:
   LOG.warning('Adafruit_DHT module not found! Using fake one.')
   import src.misc.fake_dht as DHT
@@ -21,8 +21,8 @@ class SensorReader(Thread):
 
   event_queue: Queue[AppEvent]
 
-  def __init__(self, event_queue: Queue, reading_delay: float):
-    """ reading_delay - time between readings in seconds """
+  def __init__(self, event_queue: Queue, reading_delay: int):
+    """ reading_delay - time between readings in milliseconds """
     Thread.__init__(self)
     self.daemon = True
     self.sensor = DHT.DHT22
@@ -30,7 +30,7 @@ class SensorReader(Thread):
     self.running = True
     self.e = Event()
     self.event_queue = event_queue
-    self.reading_delay = reading_delay
+    self.reading_delay = reading_delay/1000.0
 
   def run(self):
     while True:
@@ -59,7 +59,7 @@ class SensorReader(Thread):
 
   def getHumidityAndTemperatureReading(self) -> tuple[float, float]:
     # read_retry takes anywhere from 0 to 30 seconds to complete
-    _, temp = DHT.read_retry(self.sensor,self.pin)
+    _, temp = DHT.read_retry(self.sensor, self.pin)
     return (0.0, temp)
 
   def getSoundReading(self) -> float:

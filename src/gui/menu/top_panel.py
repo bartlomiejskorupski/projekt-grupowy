@@ -19,19 +19,19 @@ class TopPanel:
       border=DEBUG_BORDER)
     self.container.bg = '#282828'
 
-    addPadding(self.container, 20)
+    addPadding(self.container, 8)
     
     self.title_text = Text(
       self.container,
       text=APP_NAME,
       align='left',
-      size=26)
+      size=16)
 
     self.time_text = Text(
       self.container,
       text=getTimeString(),
       align='right',
-      size=16)
+      size=10)
     self.time_text.repeat(100,
       function=self.update_clock)
 

@@ -20,16 +20,16 @@ class SidePanel:
       border=DEBUG_BORDER)
     self.container.bg = '#282828'
 
-    addPadding(self.container, 20)
+    addPadding(self.container, 8)
 
     self.version_text = Text(
       self.container,
       text=f'v{APP_VERSION}',
       align='bottom',
-      size=8,
+      size=6,
       color='grey')
     
-    Box(self.container, layout='auto', align='bottom', width='fill', height=20)
+    Box(self.container, layout='auto', align='bottom', width='fill', height=10, border=DEBUG_BORDER)
 
     self.exit_button = PushButton(
       self.container,

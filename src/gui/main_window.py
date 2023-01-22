@@ -20,7 +20,7 @@ class MainWindow:
   side_panel: SidePanel
   home_view: HomeView
 
-  READING_DELAY = 5
+  READING_DELAY = 5000
   sensor_thread: SensorReader
   QUEUE_PROCESSING_DELAY = 100
   event_queue: Queue[AppEvent]
@@ -32,6 +32,7 @@ class MainWindow:
       height=env.WINDOW_HEIGHT,
       layout='auto')
     self.app.font = 'Ubuntu'
+    self.app.text_size = 8
     self.app.text_color = 'white'
     self.app.when_key_pressed = self.key_pressed
     self.app.when_closed = self.close_app
@@ -60,11 +61,12 @@ class MainWindow:
       try:
         e = self.event_queue.get(block=False)
         if e.event_type == AppEventType.SENSOR_READING_STARTED:
-          pass
+          self.home_view.reading_started()
         elif e.event_type == AppEventType.SENSOR_READING_FINISHED:
-          LOG.debug(f'Temp: {e.data["temperature"]}')
-          self.db_context.save_reading(Reading(e.data['datetime'], e.data['temperature']))
-          self.home_view.update_reading_texts(e.data['temperature'], e.data['humidity'], e.data['sound'])
+          temp, humid, sound, date = e.data['temperature'], e.data['humidity'], e.data['sound'], e.data['datetime']
+          if temp is not None:
+            self.db_context.save_reading(Reading(date, temp))
+          self.home_view.update_reading_texts(temp, humid, sound, self.READING_DELAY)
       except Empty:
         LOG.debug('Queue is empty.')
     self.app.after(time=self.QUEUE_PROCESSING_DELAY, function=self.process_queue)
