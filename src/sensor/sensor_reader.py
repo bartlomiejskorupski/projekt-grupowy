@@ -9,7 +9,7 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 try:
-  import Adafruit_DHT as DHTa
+  import Adafruit_DHT as DHT
 except ModuleNotFoundError:
   LOG.warning('Adafruit_DHT module not found! Using fake one.')
   import src.misc.fake_dht as DHT
