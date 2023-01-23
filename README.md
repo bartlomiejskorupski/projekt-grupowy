@@ -18,19 +18,52 @@ sudo apt upgrade
 
 sudo mkdir /var/lib/sensormanager
 sudo chmod -R 777 /var/lib/sensormanager
-sudo chmod -R 777 .
 
 pip install -r requirements.txt
 ```
-LCD setup
+### LCD setup
+Documentation:
+
 > https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
 
-Changing display resolution to 480x320
+Installing the driver
+
+```
+cd ~
+git clone https://github.com/waveshare/LCD-show.git
+cd LCD-show/
+chmod +x LCD35-show
+./LCD35-show
+```
+
+
+Changing display resolution to 480x320 (optional if wrong resolution)
 > https://forums.raspberrypi.com/viewtopic.php?t=5851
 
-Calibrate the touch screen
-> https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
+Calibrating the touch screen
 
+```
+sudo apt-get install xinput-calibrator
+```
+Click the "Menu" button on the taskbar, choose "Preference" -> "Calibrate Touchscreen".
+
+You may need to reboot the device.
+
+### Autostart
+To make this application run at startup create sensormanager.desktop file
+```
+sudo nano /etc/xdg/autostart/sensormanager.desktop
+```
+
+In this file, add the following lines:
+
+```
+[Desktop Entry]
+Type=Application
+Name=SensorManager
+Exec=/usr/bin/python3 /path/to/project/main.py --full-screen
+```
+Reboot
 ## Usage
 Running the application
 ```
