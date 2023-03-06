@@ -6,7 +6,7 @@ System monitorujący na bazie komputera Raspberry Pi
 
 **Components**:
 - High-Precision AD/DA Board
-- AM2302 sensor (connections: + to 3V3, - to GND, OUT to GPIO16)
+- AM2302 sensor (connections: + to 3V3, - to GND, OUT to GPIO12)
 - 3.5inch RPi LCD (A)
 
 **Operating system**: Raspberry Pi OS with desktop 32-bit
@@ -21,6 +21,13 @@ sudo chmod -R 777 /var/lib/sensormanager
 
 pip install -r requirements.txt
 ```
+
+### Enabling SPI Interface
+```
+sudo nano /boot/config.txt
+```
+Choose Interfacing Options -> SPI -> Yes
+
 ### LCD setup
 Documentation:
 
