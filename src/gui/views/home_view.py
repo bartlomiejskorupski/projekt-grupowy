@@ -2,6 +2,10 @@ from guizero import App, Box, Text, PushButton
 from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
 from src.misc.utils import addPadding
+from math import floor
+
+import src.misc.logger as logger
+LOG = logger.getLogger(__name__)
 
 class HomeView:
   main_window = None
@@ -92,10 +96,16 @@ class HomeView:
   def update_status(self):
     if self.is_reading:
       self.timer += self.TIMER_UPDATE_DELAY
-      self.status_text.value = f'Reading... {self.timer/1000.0:0.1f}s'
+      all_seconds = floor(self.timer/1000.0)
+      status_text = f'Reading... {all_seconds}s'
     else:
       self.timer -= self.TIMER_UPDATE_DELAY
-      self.status_text.value = f'Next reading in: {self.timer/1000.0:0.1f}s'
+      all_seconds = floor(self.timer/1000.0)
+      minutes = floor(all_seconds/60.0)
+      seconds = all_seconds % 60
+      status_text = f'Next reading in: {minutes}:{seconds:02d}'
+    if self.status_text.value != status_text:
+      self.status_text.value = status_text
 
   def reading_started(self):
     self.is_reading = True

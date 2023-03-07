@@ -1,6 +1,6 @@
 import sys
 
-APP_VERSION = '1.1'
+APP_VERSION = '1.2'
 APP_NAME = 'SensorManager'
 DATA_FOLDER_PATH = '/var/lib/sensormanager'
 

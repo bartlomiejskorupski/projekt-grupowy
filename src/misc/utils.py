@@ -15,7 +15,7 @@ def getDateString(dt: datetime = None):
 
 def getTimeString(dt: datetime = None):
   dt = datetime.now() if not dt else dt
-  return dt.strftime('%H:%M:%S')
+  return dt.strftime('%H:%M')
 
 def getDateTimeString(dt: datetime = None):
   return getDateString() + ' ' + getTimeString()

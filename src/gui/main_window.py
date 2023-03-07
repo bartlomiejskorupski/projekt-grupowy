@@ -1,6 +1,7 @@
 from queue import Queue, Empty
 from guizero import App, Box, Text, PushButton
 import env
+from src.gui.views.settings_view import SettingsView
 from src.model.app_event import AppEvent, AppEventType
 from src.model.reading import Reading
 from src.sensor.sensor_reader import SensorReader
@@ -19,8 +20,9 @@ class MainWindow:
   top_panel: TopPanel
   side_panel: SidePanel
   home_view: HomeView
+  settings_view: SettingsView
 
-  READING_DELAY = 5000
+  READING_DELAY = 10000
   sensor_thread: SensorReader
   QUEUE_PROCESSING_DELAY = 100
   event_queue: Queue[AppEvent]
@@ -45,11 +47,15 @@ class MainWindow:
 
     # init components
     LOG.debug('Initializing components')
-    self.top_panel = TopPanel(self.app)
+    self.top_panel = TopPanel(self)
     Box(self.app,layout='auto',align='top',height=0,width='fill',border=True)
     self.side_panel = SidePanel(self)
     Box(self.app,layout='auto',align='left',height='fill',width=0,border=True)
+    # init views
     self.home_view = HomeView(self)
+    self.home_view.container.visible = True
+    self.settings_view = SettingsView(self)
+    self.settings_view.container.visible = False
 
     self.sensor_thread = SensorReader(self.event_queue, self.READING_DELAY)
     self.sensor_thread.start()
@@ -78,6 +84,30 @@ class MainWindow:
     if event.key == '\u001B':
       pass
   
+  def home_button_click(self):
+    self.settings_view.container.visible = False
+    self.home_view.container.visible = True
+
+  def settings_button_click(self):
+    self.home_view.container.visible = False
+    self.settings_view.container.visible = True
+
+  def temperature_button_click(self):
+    self.settings_view.container.visible = False
+    self.home_view.container.visible = True
+
+  def humidity_button_click(self):
+    self.settings_view.container.visible = False
+    self.home_view.container.visible = True
+
+  def sound_button_click(self):
+    self.settings_view.container.visible = False
+    self.home_view.container.visible = True
+
+  def home_button_click(self):
+    self.settings_view.container.visible = False
+    self.home_view.container.visible = True
+
   def close_app(self):
     self.sensor_thread.stop()
     LOG.debug('App closing')
