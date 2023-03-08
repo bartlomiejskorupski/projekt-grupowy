@@ -13,6 +13,9 @@ class SidePanel:
   temperature_button: Picture
   sound_button: Picture
 
+  BG_COLOR = '#282828'
+  HIGHLIGHTED_COLOR = '#444444'
+
   def __init__(self, main_window):
     self.main_window = main_window
     self.app = self.main_window.app
@@ -23,7 +26,7 @@ class SidePanel:
       align='left',
       height='fill',
       border=DEBUG_BORDER)
-    self.container.bg = '#282828'
+    self.container.bg = self.BG_COLOR
 
     addPadding(self.container, 8)
 
@@ -69,33 +72,33 @@ class SidePanel:
     
   def home_button_click(self):
     self.clear_buttons_bg()
-    self.home_button.bg = '#444444'
+    self.home_button.bg = self.HIGHLIGHTED_COLOR
     self.main_window.home_button_click()
   
   def settings_button_click(self):
     self.clear_buttons_bg()
-    self.settings_button.bg = '#444444'
+    self.settings_button.bg = self.HIGHLIGHTED_COLOR
     self.main_window.settings_button_click()
 
   def temperature_button_click(self):
     self.clear_buttons_bg()
-    self.temperature_button.bg = '#444444'
+    self.temperature_button.bg = self.HIGHLIGHTED_COLOR
     self.main_window.temperature_button_click()
 
   def humidity_button_click(self):
     self.clear_buttons_bg()
-    self.humidity_button.bg = '#444444'
+    self.humidity_button.bg = self.HIGHLIGHTED_COLOR
     self.main_window.humidity_button_click()
 
   def sound_button_click(self):
     self.clear_buttons_bg()
-    self.sound_button.bg = '#444444'
+    self.sound_button.bg = self.HIGHLIGHTED_COLOR
     self.main_window.sound_button_click()
 
   def clear_buttons_bg(self):
-    self.home_button.bg = '#282828'
-    self.temperature_button.bg = '#282828'
-    self.humidity_button.bg = '#282828'
-    self.sound_button.bg = '#282828'
-    self.settings_button.bg = '#282828'
+    self.home_button.bg = self.BG_COLOR
+    self.temperature_button.bg = self.BG_COLOR
+    self.humidity_button.bg = self.BG_COLOR
+    self.sound_button.bg = self.BG_COLOR
+    self.settings_button.bg = self.BG_COLOR
 

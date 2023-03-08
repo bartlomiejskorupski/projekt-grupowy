@@ -54,6 +54,8 @@ class MainWindow:
     # init views
     self.home_view = HomeView(self)
     self.home_view.container.visible = True
+    self.side_panel.clear_buttons_bg()
+    self.side_panel.home_button.bg = self.side_panel.HIGHLIGHTED_COLOR
     self.settings_view = SettingsView(self)
     self.settings_view.container.visible = False
 
