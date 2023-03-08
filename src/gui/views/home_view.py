@@ -13,7 +13,10 @@ class HomeView:
 
   container: Box
 
-  last_reading_box: Box
+  temperature_box: Box
+  humidity_box: Box
+  sound_box: Box
+
   temperature_text: Text
   humidity_text: Text
   sound_text: Text
@@ -23,6 +26,10 @@ class HomeView:
   timer = 0.0
   is_reading = False
   TIMER_UPDATE_DELAY = 100
+
+  HEADER_TEXT_SIZE = 16
+  HEADER_TEXT_WIDTH = 160
+  READING_TEXT_SIZE = 20
 
   def __init__(self, main_window):
     self.main_window = main_window
@@ -43,42 +50,94 @@ class HomeView:
       layout='auto',
       align='top',
       width='fill',
-      height=40,
       border=DEBUG_BORDER)
     self.status_text = Text(
       self.timer_box,
-      text='Reading in: 5s',
-      size=12,
-      align='left',
-      width='fill',
-      height='fill')
-
-    self.last_reading_box = Box(
+      text='',
+      size=8,
+      align='left')
+    
+    self.temperature_box = Box(
       self.container,
-      layout='auto',
       align='top',
       width='fill',
       height='fill',
       border=DEBUG_BORDER)
+    
+    temperature_header_box = Box(
+      self.temperature_box,
+      align='left',
+      width=self.HEADER_TEXT_WIDTH,
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(
+      temperature_header_box,
+      align='right',
+      text='Temperature:',
+      size=self.HEADER_TEXT_SIZE)
+    
     self.temperature_text = Text(
-      self.last_reading_box,
-      text='Temp.: 0.0\u00B0C',
-      size=20,
+      self.temperature_box,
+      text='',
+      size=self.READING_TEXT_SIZE,
       align='top',
       width='fill',
       height='fill')
+    
+    self.humidity_box = Box(
+      self.container,
+      align='top',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    humidity_header_box = Box(
+      self.humidity_box,
+      align='left',
+      width=self.HEADER_TEXT_WIDTH,
+      height='fill',
+      border=DEBUG_BORDER)
+    
+    Text(
+      humidity_header_box,
+      align='right',
+      text='Humidity:',
+      size=self.HEADER_TEXT_SIZE)
+
     self.humidity_text = Text(
-      self.last_reading_box,
-      text='Humid.: 0.00%',
-      size=20,
-      align='top',
+      self.humidity_box,
+      text='',
+      size=self.READING_TEXT_SIZE,
+      align='left',
       width='fill',
       height='fill')
-    self.sound_text = Text(
-      self.last_reading_box,
-      text='Sound: 0.00dB',
-      size=20,
+    
+    self.sound_box = Box(
+      self.container,
       align='top',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+    
+    sound_header_box = Box(
+      self.sound_box,
+      align='left',
+      width=self.HEADER_TEXT_WIDTH,
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(
+      sound_header_box,
+      align='right',
+      text='Sound:',
+      size=self.HEADER_TEXT_SIZE)
+
+    self.sound_text = Text(
+      self.sound_box,
+      text='',
+      size=self.READING_TEXT_SIZE,
+      align='left',
       width='fill',
       height='fill')
     
@@ -86,9 +145,9 @@ class HomeView:
 
   def update_reading_texts(self, temperature, humidity, sound, next_reading_in):
     if temperature is not None:
-      self.temperature_text.value = f'Temp.: {temperature:.2f}\u00B0C'
-    self.humidity_text.value = f'Humid.: {humidity:.2f}%'
-    self.sound_text.value = f'Sound: {sound:.2f}dB'
+      self.temperature_text.value = f'{temperature:.2f}\u00B0C'
+    self.humidity_text.value = f'{humidity*100.0:.2f}%'
+    self.sound_text.value = f'{sound:.2f}dB'
     self.is_reading = False
     self.timer = next_reading_in
     self.status_text.text_color = 'white'

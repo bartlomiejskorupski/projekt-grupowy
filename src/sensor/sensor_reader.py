@@ -59,8 +59,8 @@ class SensorReader(Thread):
 
   def getHumidityAndTemperatureReading(self) -> tuple[float, float]:
     # read_retry takes anywhere from 0 to 30 seconds to complete
-    _, temp = DHT.read_retry(self.sensor, self.pin)
-    return (0.0, temp)
+    humid, temp = DHT.read_retry(self.sensor, self.pin)
+    return (humid, temp)
 
   def getSoundReading(self) -> float:
     # TODO: Implement method
