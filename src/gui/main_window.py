@@ -2,8 +2,9 @@ from queue import Queue, Empty
 from guizero import App, Box, Text, PushButton
 import env
 from src.gui.views.settings_view import SettingsView
+from src.gui.views.temperature_view import TemperatureView
 from src.model.app_event import AppEvent, AppEventType
-from src.model.reading import Reading
+from src.model.reading import Reading, ReadingType
 from src.sensor.sensor_reader import SensorReader
 from src.gui.views.home_view import HomeView
 from src.gui.menu.side_panel import SidePanel
@@ -21,8 +22,11 @@ class MainWindow:
   side_panel: SidePanel
   home_view: HomeView
   settings_view: SettingsView
+  temperature_view: TemperatureView
+  # humidity_view: HumidityView
+  # sound_view: SoundView
 
-  READING_DELAY = 10000
+  READING_DELAY = 10_000
   sensor_thread: SensorReader
   QUEUE_PROCESSING_DELAY = 100
   event_queue: Queue[AppEvent]
@@ -58,6 +62,8 @@ class MainWindow:
     self.side_panel.home_button.bg = self.side_panel.HIGHLIGHTED_COLOR
     self.settings_view = SettingsView(self)
     self.settings_view.container.visible = False
+    self.temperature_view = TemperatureView(self)
+    self.temperature_view.container.visible = False
 
     self.sensor_thread = SensorReader(self.event_queue, self.READING_DELAY)
     self.sensor_thread.start()
@@ -76,7 +82,9 @@ class MainWindow:
             LOG.warning('Reading failed after 15 tries...')
           else:
             LOG.debug(f'Measured temperature: {temp}')
-            self.db_context.save_reading(Reading(date, temp))
+            self.db_context.save_reading(Reading(date, temp, ReadingType.TEMPERATURE))
+            LOG.debug(f'Measured humidity: {humid}')
+            self.db_context.save_reading(Reading(date, humid, ReadingType.HUMIDITY))
           self.home_view.update_reading_texts(temp, humid, sound, self.READING_DELAY)
       except Empty:
         LOG.debug('Queue is empty.')
@@ -87,28 +95,33 @@ class MainWindow:
       pass
   
   def home_button_click(self):
-    self.settings_view.container.visible = False
+    self.hide_all_views()
     self.home_view.container.visible = True
 
   def settings_button_click(self):
-    self.home_view.container.visible = False
+    self.hide_all_views()
     self.settings_view.container.visible = True
 
   def temperature_button_click(self):
-    self.settings_view.container.visible = False
-    self.home_view.container.visible = True
+    self.hide_all_views()
+    self.temperature_view.container.visible = True
 
   def humidity_button_click(self):
-    self.settings_view.container.visible = False
-    self.home_view.container.visible = True
+    self.hide_all_views()
+    # self.humidity_view.container.visible = True
 
   def sound_button_click(self):
-    self.settings_view.container.visible = False
-    self.home_view.container.visible = True
+    self.hide_all_views()
+    # self.sound_view.container.visible = True
 
   def home_button_click(self):
-    self.settings_view.container.visible = False
+    self.hide_all_views()
     self.home_view.container.visible = True
+
+  def hide_all_views(self):
+    self.home_view.container.visible = False
+    self.settings_view.container.visible = False
+    self.temperature_view.container.visible = False
 
   def close_app(self):
     self.sensor_thread.stop()

@@ -1,7 +1,9 @@
 import sqlite3
 import os
 from env import DATA_FOLDER_PATH
-from src.model.reading import Reading
+from src.model.reading import Reading, ReadingType
+from src.misc.utils import getDateTimeString
+from datetime import datetime
 
 import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
@@ -11,6 +13,8 @@ class LocalContext:
   DB_FILENAME = 'data.db'
   db_file_path: str
   connection: sqlite3.Connection
+
+  DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
   def __init__(self):
     if not os.path.exists(DATA_FOLDER_PATH):
@@ -41,7 +45,8 @@ class LocalContext:
       CREATE TABLE IF NOT EXISTS readings (
         id INTEGER PRIMARY KEY,
         "date" DATETIME NOT NULL,
-        value REAL NOT NULL
+        value REAL NOT NULL,
+        "type" TEXT NOT NULL
       );
     """
     try:
@@ -51,10 +56,30 @@ class LocalContext:
       LOG.error(e)
   
   def save_reading(self, reading: Reading) -> int:
-    sql = 'INSERT INTO readings("date", value) VALUES (?,?)'
-    # LOG.debug('Executing query ' + sql + ' with ' + str(reading))
     cur = self.connection.cursor()
-    cur.execute(sql, (reading.date.strftime('%Y-%m-%d %H:%M:%S.%f'), reading.value))
+    sql = 'INSERT INTO readings("date", value, "type") VALUES (?,?,?)'
+    reading_date_text = reading.date.strftime('%Y-%m-%d %H:%M:%S.%f')
+    cur.execute(sql, (reading_date_text, reading.value, reading.type.value))
+    LOG.debug(f'Saving to db: date={reading_date_text}, value={reading.value}, type={reading.type.value}')
     self.connection.commit()
     return cur.lastrowid
+  
+  def fetch_readings(self, type: ReadingType, date_from: datetime, date_to: datetime):
+    cur = self.connection.cursor()
+    date_from_str = date_from.strftime(self.DATETIME_FORMAT)
+    date_to_str = date_to.strftime(self.DATETIME_FORMAT)
+    LOG.info(f'Fetching readings of type {type.value} and from {date_from_str} to {date_to_str}')
+    sql = f'SELECT * FROM readings WHERE "type"="{type.value}" AND "date" BETWEEN "{date_from_str}" AND "{date_to_str}"'
+    res = cur.execute(sql)
+    readings = res.fetchall()
+    LOG.info(f'Fetched {len(readings)} readings')
+    return readings
 
+  def fetch_all(self):
+    cur = self.connection.cursor()
+    LOG.info(f'Fetching all readings')
+    sql = f'SELECT * FROM readings'
+    res = cur.execute(sql)
+    readings = res.fetchall()
+    LOG.info(f'Fetched {len(readings)} readings')
+    return readings

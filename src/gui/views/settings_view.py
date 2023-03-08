@@ -1,7 +1,7 @@
-from guizero import App, Box, Text, PushButton, TextBox
+from guizero import Box, Text, PushButton, TextBox
 from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
-from src.misc.utils import addPadding, getDateString
+from src.misc.utils import addPadding, getDateString, getDateTimeString
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -43,12 +43,13 @@ class SettingsView:
   sound_from_date: datetime
   sound_to_date: datetime
 
-  DEFAULT_FROM_DATE = datetime.now() - timedelta(days=1)
-  DEFAULT_TO_DATE = datetime.now()
+  DEFAULT_FROM_DATE = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
+  DEFAULT_TO_DATE = datetime.now().replace(hour=23, minute=59, second=59)
 
   def __init__(self, main_window):
     self.main_window = main_window
     self.db_context = self.main_window.db_context
+    # LOG.debug(f'From: {getDateTimeString(self.DEFAULT_FROM_DATE)} To: {getDateTimeString(self.DEFAULT_TO_DATE)}')
 
     self.temp_from_date = self.DEFAULT_FROM_DATE
     self.temp_to_date = self.DEFAULT_TO_DATE

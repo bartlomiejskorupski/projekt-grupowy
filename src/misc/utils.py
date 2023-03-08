@@ -18,5 +18,5 @@ def getTimeString(dt: datetime = None):
   return dt.strftime('%H:%M')
 
 def getDateTimeString(dt: datetime = None):
-  return getDateString() + ' ' + getTimeString()
+  return getDateString(dt) + ' ' + getTimeString(dt)
 
