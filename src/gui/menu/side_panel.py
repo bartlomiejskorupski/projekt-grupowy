@@ -1,20 +1,23 @@
-from guizero import App, Box, Text, Picture
+from guizero import App, Box, Text, PushButton
 from env import DEBUG_BORDER
 from src.misc.utils import getTimeString, addPadding
+from PIL import Image
 
 class SidePanel:
   main_window = None
   app: App
   container: Box
 
-  home_button: Picture
-  settings_button: Picture
-  humidity_button: Picture
-  temperature_button: Picture
-  sound_button: Picture
+  home_button: PushButton
+  settings_button: PushButton
+  humidity_button: PushButton
+  temperature_button: PushButton
+  sound_button: PushButton
 
   BG_COLOR = '#282828'
   HIGHLIGHTED_COLOR = '#444444'
+
+  IMAGE_SIZE = 36
 
   def __init__(self, main_window):
     self.main_window = main_window
@@ -28,47 +31,48 @@ class SidePanel:
       border=DEBUG_BORDER)
     self.container.bg = self.BG_COLOR
 
-    addPadding(self.container, 8)
+    addPadding(self.container, 6)
 
-    self.home_button = Picture(
+    self.home_button = PushButton(
       self.container,
-      image="src/images/home.png",
+      image='src/images/home.png',
       align='top',
-      width=40,
-      height=40)
-    self.home_button.when_clicked = self.home_button_click
+      width=self.IMAGE_SIZE,
+      height=self.IMAGE_SIZE,
+      command=self.home_button_click)
+    
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
-    self.settings_button = Picture(
+    self.settings_button = PushButton(
       self.container,
-      image="src/images/settings.png",
+      image='src/images/settings.png',
       align='top',
-      width=40,
-      height=40)
-    self.settings_button.when_clicked = self.settings_button_click
+      width=self.IMAGE_SIZE,
+      height=self.IMAGE_SIZE,
+      command=self.settings_button_click)
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
-    self.temperature_button = Picture(
+    self.temperature_button = PushButton(
       self.container,
       image="src/images/temperature.png",
       align='top',
-      width=40,
-      height=40)
-    self.temperature_button.when_clicked = self.temperature_button_click
+      width=self.IMAGE_SIZE,
+      height=self.IMAGE_SIZE,
+      command=self.temperature_button_click)
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
-    self.humidity_button = Picture(
+    self.humidity_button = PushButton(
       self.container,
       image="src/images/humidity.png",
       align='top',
-      width=40,
-      height=40)
-    self.humidity_button.when_clicked = self.humidity_button_click
+      width=self.IMAGE_SIZE,
+      height=self.IMAGE_SIZE,
+      command=self.humidity_button_click)
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
-    self.sound_button = Picture(
+    self.sound_button = PushButton(
       self.container,
       image="src/images/sound.png",
       align='top',
-      width=40,
-      height=40)
-    self.sound_button.when_clicked = self.sound_button_click
+      width=self.IMAGE_SIZE,
+      height=self.IMAGE_SIZE,
+      command=self.sound_button_click)
     
   def home_button_click(self):
     self.clear_buttons_bg()

@@ -3,7 +3,6 @@ from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
 from src.misc.utils import addPadding, getDateString, getDateTimeString
 from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
 
 import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
@@ -133,14 +132,14 @@ class SettingsView:
       self.temp_from_box,
       align='left',
       command=self.temp_from_day_subtract_button_click,
-      text='-'
+      text='<'
     )
 
     PushButton(
       self.temp_from_box,
       align='left',
       command=self.temp_from_day_add_button_click,
-      text='+'
+      text='>'
     )
 
     self.temp_to_box = Box(
@@ -167,14 +166,14 @@ class SettingsView:
       self.temp_to_box,
       align='left',
       command=self.temp_to_day_subtract_button_click,
-      text='-'
+      text='<'
     )
 
     PushButton(
       self.temp_to_box,
       align='left',
       command=self.temp_to_day_add_button_click,
-      text='+'
+      text='>'
     )
 
     # Humidity
@@ -203,14 +202,14 @@ class SettingsView:
       self.humidity_from_box,
       align='left',
       command=self.humidity_from_day_subtract_button_click,
-      text='-'
+      text='<'
     )
 
     PushButton(
       self.humidity_from_box,
       align='left',
       command=self.humidity_from_day_add_button_click,
-      text='+'
+      text='>'
     )
 
     self.humidity_to_box = Box(
@@ -237,14 +236,14 @@ class SettingsView:
       self.humidity_to_box,
       align='left',
       command=self.humidity_to_day_subtract_button_click,
-      text='-'
+      text='<'
     )
 
     PushButton(
       self.humidity_to_box,
       align='left',
       command=self.humidity_to_day_add_button_click,
-      text='+'
+      text='>'
     )
 
     # Sound
@@ -273,14 +272,14 @@ class SettingsView:
       self.sound_from_box,
       align='left',
       command=self.sound_from_day_subtract_button_click,
-      text='-'
+      text='<'
     )
 
     PushButton(
       self.sound_from_box,
       align='left',
       command=self.sound_from_day_add_button_click,
-      text='+'
+      text='>'
     )
 
     self.sound_to_box = Box(
@@ -307,14 +306,14 @@ class SettingsView:
       self.sound_to_box,
       align='left',
       command=self.sound_to_day_subtract_button_click,
-      text='-'
+      text='<'
     )
 
     PushButton(
       self.sound_to_box,
       align='left',
       command=self.sound_to_day_add_button_click,
-      text='+'
+      text='>'
     )
 
   # Temperature
