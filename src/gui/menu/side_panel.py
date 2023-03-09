@@ -2,6 +2,7 @@ from guizero import App, Box, Text, PushButton
 from env import DEBUG_BORDER
 from src.misc.utils import getTimeString, addPadding
 from PIL import Image
+from os import path, getcwd
 
 class SidePanel:
   main_window = None
@@ -35,7 +36,7 @@ class SidePanel:
 
     self.home_button = PushButton(
       self.container,
-      image='src/images/home.png',
+      image=path.join(getcwd(), 'src/images/home.png'),
       align='top',
       width=self.IMAGE_SIZE,
       height=self.IMAGE_SIZE,
@@ -44,7 +45,7 @@ class SidePanel:
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
     self.settings_button = PushButton(
       self.container,
-      image='src/images/settings.png',
+      image=path.join(getcwd(), 'src/images/settings.png'),
       align='top',
       width=self.IMAGE_SIZE,
       height=self.IMAGE_SIZE,
@@ -52,7 +53,7 @@ class SidePanel:
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
     self.temperature_button = PushButton(
       self.container,
-      image="src/images/temperature.png",
+      image=path.join(getcwd(), "src/images/temperature.png"),
       align='top',
       width=self.IMAGE_SIZE,
       height=self.IMAGE_SIZE,
@@ -60,7 +61,7 @@ class SidePanel:
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
     self.humidity_button = PushButton(
       self.container,
-      image="src/images/humidity.png",
+      image=path.join(getcwd(), "src/images/humidity.png"),
       align='top',
       width=self.IMAGE_SIZE,
       height=self.IMAGE_SIZE,
@@ -68,7 +69,7 @@ class SidePanel:
     Box(self.container, layout='auto', align='top', width='fill', height=10, border=DEBUG_BORDER)
     self.sound_button = PushButton(
       self.container,
-      image="src/images/sound.png",
+      image=path.join(getcwd(), "src/images/sound.png"),
       align='top',
       width=self.IMAGE_SIZE,
       height=self.IMAGE_SIZE,
