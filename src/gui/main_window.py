@@ -2,7 +2,7 @@ from queue import Queue, Empty
 from guizero import App, Box, Text, PushButton
 import env
 from src.gui.views.settings_view import SettingsView
-from src.gui.views.temperature_view import TemperatureView
+from src.gui.views.plot_view import PlotView
 from src.model.app_event import AppEvent, AppEventType
 from src.model.reading import Reading, ReadingType
 from src.sensor.sensor_reader import SensorReader
@@ -22,7 +22,7 @@ class MainWindow:
   side_panel: SidePanel
   home_view: HomeView
   settings_view: SettingsView
-  temperature_view: TemperatureView
+  plot_view: PlotView
   # humidity_view: HumidityView
   # sound_view: SoundView
 
@@ -62,8 +62,10 @@ class MainWindow:
     self.side_panel.home_button.bg = self.side_panel.HIGHLIGHTED_COLOR
     self.settings_view = SettingsView(self)
     self.settings_view.container.visible = False
-    self.temperature_view = TemperatureView(self)
-    self.temperature_view.container.visible = False
+    self.plot_view = PlotView(self)
+    self.plot_view.container.visible = False
+    # Initial plot update
+    self.settings_view.save_button_click()
 
     self.sensor_thread = SensorReader(self.event_queue, self.READING_DELAY)
     self.sensor_thread.start()
@@ -104,15 +106,18 @@ class MainWindow:
 
   def temperature_button_click(self):
     self.hide_all_views()
-    self.temperature_view.container.visible = True
+    self.plot_view.change_plot(ReadingType.TEMPERATURE)
+    self.plot_view.container.visible = True
 
   def humidity_button_click(self):
     self.hide_all_views()
-    # self.humidity_view.container.visible = True
+    self.plot_view.change_plot(ReadingType.HUMIDITY)
+    self.plot_view.container.visible = True
 
   def sound_button_click(self):
     self.hide_all_views()
-    # self.sound_view.container.visible = True
+    self.plot_view.change_plot(ReadingType.SOUND)
+    self.plot_view.container.visible = True
 
   def home_button_click(self):
     self.hide_all_views()
@@ -121,7 +126,7 @@ class MainWindow:
   def hide_all_views(self):
     self.home_view.container.visible = False
     self.settings_view.container.visible = False
-    self.temperature_view.container.visible = False
+    self.plot_view.container.visible = False
 
   def close_app(self):
     self.sensor_thread.stop()

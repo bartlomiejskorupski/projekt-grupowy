@@ -146,7 +146,7 @@ class HomeView:
   def update_reading_texts(self, temperature, humidity, sound, next_reading_in):
     if temperature is not None:
       self.temperature_text.value = f'{temperature:.2f}\u00B0C'
-    self.humidity_text.value = f'{humidity*100.0:.2f}%'
+    self.humidity_text.value = f'{humidity:.2f}%'
     self.sound_text.value = f'{sound:.2f}dB'
     self.is_reading = False
     self.timer = next_reading_in

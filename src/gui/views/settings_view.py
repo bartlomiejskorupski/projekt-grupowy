@@ -13,6 +13,8 @@ class SettingsView:
 
   container: Box
 
+  save_button: PushButton
+
   temp_box: Box
   humidity_box: Box
   sound_box: Box
@@ -101,6 +103,12 @@ class SettingsView:
       width='fill',
       height='fill',
       border=DEBUG_BORDER)
+    
+    self.save_button = PushButton(
+      self.container,
+      align='top',
+      text='Save',
+      command=self.save_button_click)
 
     Text(
       self.sound_box,
@@ -370,3 +378,15 @@ class SettingsView:
     self.sound_to_date = self.sound_to_date - timedelta(days=1)
     self.sound_to_tb.value = getDateString(self.sound_to_date)
 
+  # save button
+
+  def save_button_click(self):
+    LOG.debug(f'Save button pressed')
+    self.main_window.plot_view.update_plots(
+      self.temp_from_date,
+      self.temp_to_date,
+      self.humidity_from_date,
+      self.humidity_to_date,
+      self.sound_from_date,
+      self.sound_to_date)
+  
