@@ -20,6 +20,9 @@ class TemperatureView:
   PLOT_WITDH = 360
   PLOT_HEIGHT = 190
 
+  date_from = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
+  date_to = datetime.now().replace(hour=23, minute=59, second=59)
+
   def __init__(self, main_window):
     self.main_window = main_window
     self.db_context = self.main_window.db_context
@@ -54,26 +57,23 @@ class TemperatureView:
       command=self.debug_button_click)
     
   def debug_button_click(self):
-    date_from = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
-    date_to = datetime.now().replace(hour=23, minute=59, second=59)
-    readings = self.db_context.fetch_readings(ReadingType.TEMPERATURE, date_from, date_to)
-
-    filtered =  [
-      (datetime.strptime(date_str, self.db_context.DATETIME_FORMAT), value)
-      for (_, date_str, value, type) in readings
-      if type == ReadingType.TEMPERATURE.value
-    ]
-    (dates, values) = list(zip(*filtered))
+    self.update_plot()
+  
+  def update_plot(self):
+    readings = self.db_context.fetch_readings(ReadingType.TEMPERATURE, self.date_from, self.date_to)
+    (_, date_strings, values, _) = list(zip(*readings))
+    dates = [datetime.strptime(date_str, self.db_context.DATETIME_FORMAT) for date_str in date_strings]
 
     plt.figure()
     plt.plot(dates, values)
     plt.title('Temperature')
-    plt.axis([dates[0], dates[-1], 0, 30])
+    plt.axis([dates[0], dates[-1], 0, max(values) + 5.0])
     image_buffer = BytesIO()
     plt.savefig(image_buffer, format='png')
     plt.close()
     image = Image.open(image_buffer)
     self.plot_pic.image = image
     image_buffer.close()
+    LOG.debug(f'Temperature plot updated')
 
 

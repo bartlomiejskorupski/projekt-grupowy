@@ -19,6 +19,7 @@ sudo apt upgrade
 sudo mkdir /var/lib/sensormanager
 sudo chmod -R 777 /var/lib/sensormanager
 
+sudo apt-get install python-dev libatlas-base-dev
 pip install -r requirements.txt
 ```
 
