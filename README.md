@@ -69,7 +69,7 @@ In this file, add the following lines:
 [Desktop Entry]
 Type=Application
 Name=SensorManager
-Exec=/usr/bin/python3 /path/to/project/main.py --full-screen
+Exec=/usr/bin/python3 /path/to/project/main.py --full-screen --project-path=/path/to/project
 ```
 Reboot
 ## Usage
@@ -80,3 +80,4 @@ python3 main.py [options]
 Options:
 - --debug-border - show box borders
 - --full-screen - open in full screen mode
+- --project-path - set project path (changes path from relative to absolute for image loading)

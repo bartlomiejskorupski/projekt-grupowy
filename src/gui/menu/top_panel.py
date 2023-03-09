@@ -1,7 +1,7 @@
 from guizero import App, Text, Box, PushButton, Picture, yesno
-from env import APP_NAME, DEBUG_BORDER, APP_VERSION
+from env import APP_NAME, DEBUG_BORDER, APP_VERSION, PROJECT_PATH
 from src.misc.utils import getTimeString, addPadding
-from os import path, getcwd
+from os import path
 
 class TopPanel:
   main_window = None
@@ -41,7 +41,7 @@ class TopPanel:
 
     self.exit_button = Picture(
       self.container,
-      image=path.join(getcwd(), 'src/images/exit.png'),
+      image=path.join(PROJECT_PATH, 'src/images/exit.png'),
       align='right',
       width=24,
       height=24)
