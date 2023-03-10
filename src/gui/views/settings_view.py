@@ -151,7 +151,7 @@ class SettingsView:
       self.temp_from_box,
       align='left',
       text=f'{getDateString(self.temp_from_date)}',
-      enabled=False)
+      enabled=True)
     self.temp_from_tb.text_size = 12
 
     tfp = PushButton(
@@ -189,7 +189,7 @@ class SettingsView:
       self.temp_to_box,
       align='left',
       text=f'{getDateString(self.temp_to_date)}',
-      enabled=False)
+      enabled=True)
     self.temp_to_tb.text_size = 12
 
     ttp = PushButton(
@@ -229,7 +229,7 @@ class SettingsView:
       self.humidity_from_box,
       align='left',
       text=f'{getDateString(self.humidity_from_date)}',
-      enabled=False)
+      enabled=True)
     self.humidity_from_tb.text_size = 12
 
     hfp = PushButton(
@@ -267,7 +267,7 @@ class SettingsView:
       self.humidity_to_box,
       align='left',
       text=f'{getDateString(self.humidity_to_date)}',
-      enabled=False)
+      enabled=True)
     self.humidity_to_tb.text_size = 12
 
     htp = PushButton(
@@ -307,7 +307,7 @@ class SettingsView:
       self.sound_from_box,
       align='left',
       text=f'{getDateString(self.sound_from_date)}',
-      enabled=False)
+      enabled=True)
     self.sound_from_tb.text_size = 12
 
     sfp = PushButton(
@@ -345,7 +345,7 @@ class SettingsView:
       self.sound_to_box,
       align='left',
       text=f'{getDateString(self.sound_to_date)}',
-      enabled=False)
+      enabled=True)
     self.sound_to_tb.text_size = 12
 
     stp = PushButton(
