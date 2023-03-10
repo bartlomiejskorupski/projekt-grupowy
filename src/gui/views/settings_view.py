@@ -139,6 +139,14 @@ class SettingsView:
       align='left',
       text='From: ')
 
+    tfm = PushButton(
+      self.temp_from_box,
+      align='left',
+      command=self.temp_from_day_subtract_button_click,
+      text='<')
+    tfm.text_size = 12
+    tfm.padding(6, 0)
+
     self.temp_from_tb = TextBox(
       self.temp_from_box,
       align='left',
@@ -146,19 +154,14 @@ class SettingsView:
       enabled=False)
     self.temp_from_tb.text_size = 12
 
-    PushButton(
-      self.temp_from_box,
-      align='left',
-      command=self.temp_from_day_subtract_button_click,
-      text='<'
-    )
-
-    PushButton(
+    tfp = PushButton(
       self.temp_from_box,
       align='left',
       command=self.temp_from_day_add_button_click,
       text='>'
     )
+    tfp.text_size = 12
+    tfp.padding(6, 0)
 
     self.temp_to_box = Box(
       self.temp_box,
@@ -173,6 +176,15 @@ class SettingsView:
       align='left',
       text='To: ')
 
+    ttm = PushButton(
+      self.temp_to_box,
+      align='left',
+      command=self.temp_to_day_subtract_button_click,
+      text='<'
+    )
+    ttm.text_size = 12
+    ttm.padding(6, 0)
+
     self.temp_to_tb = TextBox(
       self.temp_to_box,
       align='left',
@@ -180,19 +192,14 @@ class SettingsView:
       enabled=False)
     self.temp_to_tb.text_size = 12
 
-    PushButton(
-      self.temp_to_box,
-      align='left',
-      command=self.temp_to_day_subtract_button_click,
-      text='<'
-    )
-
-    PushButton(
+    ttp = PushButton(
       self.temp_to_box,
       align='left',
       command=self.temp_to_day_add_button_click,
       text='>'
     )
+    ttp.text_size = 12
+    ttp.padding(6, 0)
 
     # Humidity
 
@@ -209,6 +216,15 @@ class SettingsView:
       align='left',
       text='From: ')
 
+    hfm = PushButton(
+      self.humidity_from_box,
+      align='left',
+      command=self.humidity_from_day_subtract_button_click,
+      text='<'
+    )
+    hfm.text_size = 12
+    hfm.padding(6, 0)
+
     self.humidity_from_tb = TextBox(
       self.humidity_from_box,
       align='left',
@@ -216,19 +232,14 @@ class SettingsView:
       enabled=False)
     self.humidity_from_tb.text_size = 12
 
-    PushButton(
-      self.humidity_from_box,
-      align='left',
-      command=self.humidity_from_day_subtract_button_click,
-      text='<'
-    )
-
-    PushButton(
+    hfp = PushButton(
       self.humidity_from_box,
       align='left',
       command=self.humidity_from_day_add_button_click,
       text='>'
     )
+    hfp.text_size = 12
+    hfp.padding(6, 0)
 
     self.humidity_to_box = Box(
       self.humidity_box,
@@ -243,6 +254,15 @@ class SettingsView:
       align='left',
       text='To: ')
 
+    htm = PushButton(
+      self.humidity_to_box,
+      align='left',
+      command=self.humidity_to_day_subtract_button_click,
+      text='<'
+    )
+    htm.text_size = 12
+    htm.padding(6, 0)
+
     self.humidity_to_tb = TextBox(
       self.humidity_to_box,
       align='left',
@@ -250,19 +270,14 @@ class SettingsView:
       enabled=False)
     self.humidity_to_tb.text_size = 12
 
-    PushButton(
-      self.humidity_to_box,
-      align='left',
-      command=self.humidity_to_day_subtract_button_click,
-      text='<'
-    )
-
-    PushButton(
+    htp = PushButton(
       self.humidity_to_box,
       align='left',
       command=self.humidity_to_day_add_button_click,
       text='>'
     )
+    htp.text_size = 12
+    htp.padding(6, 0)
 
     # Sound
 
@@ -279,6 +294,15 @@ class SettingsView:
       align='left',
       text='From: ')
 
+    sfm = PushButton(
+      self.sound_from_box,
+      align='left',
+      command=self.sound_from_day_subtract_button_click,
+      text='<'
+    )
+    sfm.text_size = 12
+    sfm.padding(6, 0)
+
     self.sound_from_tb = TextBox(
       self.sound_from_box,
       align='left',
@@ -286,19 +310,14 @@ class SettingsView:
       enabled=False)
     self.sound_from_tb.text_size = 12
 
-    PushButton(
-      self.sound_from_box,
-      align='left',
-      command=self.sound_from_day_subtract_button_click,
-      text='<'
-    )
-
-    PushButton(
+    sfp = PushButton(
       self.sound_from_box,
       align='left',
       command=self.sound_from_day_add_button_click,
       text='>'
     )
+    sfp.text_size = 12
+    sfp.padding(6, 0)
 
     self.sound_to_box = Box(
       self.sound_box,
@@ -313,6 +332,15 @@ class SettingsView:
       align='left',
       text='To: ')
 
+    stm = PushButton(
+      self.sound_to_box,
+      align='left',
+      command=self.sound_to_day_subtract_button_click,
+      text='<'
+    )
+    stm.text_size = 12
+    stm.padding(6, 0)
+
     self.sound_to_tb = TextBox(
       self.sound_to_box,
       align='left',
@@ -320,19 +348,14 @@ class SettingsView:
       enabled=False)
     self.sound_to_tb.text_size = 12
 
-    PushButton(
-      self.sound_to_box,
-      align='left',
-      command=self.sound_to_day_subtract_button_click,
-      text='<'
-    )
-
-    PushButton(
+    stp = PushButton(
       self.sound_to_box,
       align='left',
       command=self.sound_to_day_add_button_click,
       text='>'
     )
+    stp.text_size = 12
+    stp.padding(6, 0)
 
   # Temperature
 
