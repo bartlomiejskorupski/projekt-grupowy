@@ -1,4 +1,4 @@
-from guizero import Box, Text, PushButton, TextBox
+from guizero import Box, Text, PushButton, TextBox, error
 from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
 from src.misc.utils import addPadding, getDateString, getDateTimeString
@@ -13,7 +13,9 @@ class SettingsView:
 
   container: Box
 
+  button_box: Box
   save_button: PushButton
+  reset_button: PushButton
 
   temp_box: Box
   humidity_box: Box
@@ -78,10 +80,8 @@ class SettingsView:
       height='fill',
       border=DEBUG_BORDER)
     
-    Text(
-      self.temp_box,
-      align='top',
-      text='Temperature')
+    temp_header_box = Box(self.temp_box, align='top', width='fill', border=DEBUG_BORDER)
+    Text(temp_header_box, align='left', text='Temperature', size=10)
     
     self.humidity_box = Box(
       self.container,
@@ -91,10 +91,8 @@ class SettingsView:
       height='fill',
       border=DEBUG_BORDER)
     
-    Text(
-      self.humidity_box,
-      align='top',
-      text='Humidity')
+    humidity_header_box = Box(self.humidity_box, align='top', width='fill', border=DEBUG_BORDER)
+    Text(humidity_header_box, align='left', text='Humidity', size=10)
     
     self.sound_box = Box(
       self.container,
@@ -104,16 +102,28 @@ class SettingsView:
       height='fill',
       border=DEBUG_BORDER)
     
-    self.save_button = PushButton(
+    self.button_box = Box(
       self.container,
       align='top',
+      width='fill',
+      border=DEBUG_BORDER)
+
+    self.save_button = PushButton(
+      self.button_box,
+      align='right',
       text='Save',
       command=self.save_button_click)
+    
+    Box(self.button_box, align='right', height='fill', width=10, border=DEBUG_BORDER)
 
-    Text(
-      self.sound_box,
-      align='top',
-      text='Sound')
+    self.reset_button = PushButton(
+      self.button_box,
+      align='right',
+      text='Reset',
+      command=self.reset_button_click)
+
+    sound_header_box = Box(self.sound_box, align='top', width='fill', border=DEBUG_BORDER)
+    Text(sound_header_box, align='left', text='Sound', size=10)
     
     # Temperature
     self.temp_from_box = Box(
@@ -381,7 +391,12 @@ class SettingsView:
   # save button
 
   def save_button_click(self):
-    LOG.debug(f'Save button pressed')
+    if  self.temp_from_date > self.temp_to_date \
+    or self.humidity_from_date > self.humidity_to_date \
+    or self.sound_from_date > self.sound_to_date:
+      error('Error', '"From date" must be less than "To date"')
+      return
+
     self.main_window.plot_view.update_plots(
       self.temp_from_date,
       self.temp_to_date,
@@ -390,3 +405,17 @@ class SettingsView:
       self.sound_from_date,
       self.sound_to_date)
   
+  def reset_button_click(self):
+    self.temp_from_date = self.DEFAULT_FROM_DATE
+    self.temp_to_date = self.DEFAULT_TO_DATE
+    self.temp_from_tb.value = getDateString(self.temp_from_date)
+    self.temp_to_tb.value = getDateString(self.temp_to_date)
+    self.humidity_from_date = self.DEFAULT_FROM_DATE
+    self.humidity_to_date = self.DEFAULT_TO_DATE
+    self.humidity_from_tb.value = getDateString(self.humidity_from_date)
+    self.humidity_to_tb.value = getDateString(self.humidity_to_date)
+    self.sound_from_date = self.DEFAULT_FROM_DATE
+    self.sound_to_date = self.DEFAULT_TO_DATE
+    self.sound_from_tb.value = getDateString(self.sound_from_date)
+    self.sound_to_tb.value = getDateString(self.sound_to_date)
+
