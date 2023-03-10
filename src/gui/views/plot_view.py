@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 from PIL import Image
 from io import BytesIO
+import matplotlib.dates as mdates
 
 import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
@@ -100,21 +101,25 @@ class PlotView:
     plot_pic: Picture = None
     date_from = None
     date_to = None
+    ylabel = ''
     if reading_type == ReadingType.TEMPERATURE:
       plot_title = 'Temperature'
       plot_pic = self.temp_plot_pic
       date_from = self.temp_from_date
       date_to = self.temp_to_date
+      ylabel = '[\u00B0C]'
     if reading_type == ReadingType.HUMIDITY:
       plot_title = 'Humidity'
       plot_pic = self.humid_plot_pic
       date_from = self.humid_from_date
       date_to = self.humid_to_date
+      ylabel = '[%]'
     if reading_type == ReadingType.SOUND:
       plot_title = 'Sound'
       plot_pic = self.sound_plot_pic
       date_from = self.sound_from_date
       date_to = self.sound_to_date
+      ylabel = '[dB]'
 
     readings = self.db_context.fetch_readings(reading_type, date_from, date_to)
 
@@ -124,11 +129,17 @@ class PlotView:
       (_, date_strings, values, _) = list(zip(*readings))
       dates = [datetime.strptime(date_str, self.db_context.DATETIME_FORMAT) for date_str in date_strings]
 
-    plt.figure()
-    plt.plot(dates, values, 'g-')
-    plt.plot(dates, values, 'r.')
-
+    fig, ax = plt.subplots()
+    ax.plot(dates, values, 'g-', dates, values, 'r.')
+    ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
+    # plt.plot(dates, values, 'g-')
+    # plt.plot(dates, values, 'r.')
+    plt.xlabel('Date')
+    plt.ylabel(ylabel)
     plt.title(plot_title)
+    #plt.xticks(rotation=25, ha='right')
+    
+
     #plt.axis([dates[0], dates[-1], 20, max(values) + 1.0])
     image_buffer = BytesIO()
     plt.savefig(image_buffer, format='png')
