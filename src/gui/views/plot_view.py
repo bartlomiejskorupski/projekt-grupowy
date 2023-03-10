@@ -5,9 +5,11 @@ from src.misc.utils import addPadding
 from src.model.reading import ReadingType
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib as mpl
 from PIL import Image
 from io import BytesIO
-import matplotlib.dates as mdates
+
 
 import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
@@ -30,6 +32,11 @@ class PlotView:
   humid_to_date = datetime.now().replace(hour=23, minute=59, second=59)
   sound_from_date = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
   sound_to_date = datetime.now().replace(hour=23, minute=59, second=59)
+
+  mpl.rcParams['text.color'] = 'white'
+  mpl.rcParams['axes.labelcolor'] = 'white'
+  mpl.rcParams['xtick.color'] = 'white'
+  mpl.rcParams['ytick.color'] = 'white'
 
   def __init__(self, main_window):
     self.main_window = main_window
@@ -128,17 +135,21 @@ class PlotView:
     if len(readings) > 0:
       (_, date_strings, values, _) = list(zip(*readings))
       dates = [datetime.strptime(date_str, self.db_context.DATETIME_FORMAT) for date_str in date_strings]
-
-    fig, ax = plt.subplots()
+    mpl.rcParams['text.color'] = 'white'
+    mpl.rcParams['axes.labelcolor'] = 'white'
+    mpl.rcParams['xtick.color'] = 'white'
+    mpl.rcParams['ytick.color'] = 'white'
+    fig = plt.figure(facecolor='#222222')
+    ax = plt.axes()
     ax.plot(dates, values, 'g-', dates, values, 'r.')
+
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
     # plt.plot(dates, values, 'g-')
     # plt.plot(dates, values, 'r.')
     plt.xlabel('Date')
     plt.ylabel(ylabel)
     plt.title(plot_title)
-    #plt.xticks(rotation=25, ha='right')
-    
+    plt.grid(linestyle='--')
 
     #plt.axis([dates[0], dates[-1], 20, max(values) + 1.0])
     image_buffer = BytesIO()
