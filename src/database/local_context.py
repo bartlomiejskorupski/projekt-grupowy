@@ -83,3 +83,18 @@ class LocalContext:
     readings = res.fetchall()
     LOG.info(f'Fetched {len(readings)} readings')
     return readings
+  
+  def delete_reading(self, id: int):
+    cur = self.connection.cursor()
+    sql = 'DELETE FROM readings WHERE id=?'
+    cur.execute(sql, (id,))
+    self.connection.commit()
+
+
+  def delete_readings(self, id_list: list[int]):
+    tuples = list(map(lambda id: (id,), id_list))
+    cur = self.connection.cursor()
+    sql = 'DELETE FROM readings WHERE id=?'
+    cur.executemany(sql, tuples)
+    self.connection.commit()
+    
