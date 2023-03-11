@@ -81,27 +81,26 @@ class PlotView:
       self.sound_plot_pic.visible = True
 
   def update_plots(self,
-        temp_from_date: datetime,
-        temp_to_date: datetime,
-        humid_from_date: datetime,
-        humid_to_date: datetime,
-        sound_from_date: datetime,
-        sound_to_date: datetime):
-    if self.temp_from_date != temp_from_date or self.temp_to_date != temp_to_date:
-      self.temp_from_date = temp_from_date
-      self.temp_to_date = temp_to_date
-      LOG.debug(f'Updating temperature plot')
-      self.update_plot(ReadingType.TEMPERATURE)
-    if self.humid_from_date != humid_from_date or self.humid_to_date != humid_to_date:
-      self.humid_from_date = humid_from_date
-      self.humid_to_date = humid_to_date
-      LOG.debug(f'Updating humidity plot')
-      self.update_plot(ReadingType.HUMIDITY)
-    if self.sound_from_date != sound_from_date or self.sound_to_date != sound_to_date:
-      self.sound_from_date = sound_from_date
-      self.sound_to_date = sound_to_date
-      LOG.debug(f'Updating sound plot')
-      self.update_plot(ReadingType.SOUND)
+      temp_from_date: datetime,
+      temp_to_date: datetime,
+      humid_from_date: datetime,
+      humid_to_date: datetime,
+      sound_from_date: datetime,
+      sound_to_date: datetime):
+    self.temp_from_date = temp_from_date
+    self.temp_to_date = temp_to_date
+    LOG.debug(f'Updating temperature plot')
+    self.update_plot(ReadingType.TEMPERATURE)
+
+    self.humid_from_date = humid_from_date
+    self.humid_to_date = humid_to_date
+    LOG.debug(f'Updating humidity plot')
+    self.update_plot(ReadingType.HUMIDITY)
+
+    self.sound_from_date = sound_from_date
+    self.sound_to_date = sound_to_date
+    LOG.debug(f'Updating sound plot')
+    self.update_plot(ReadingType.SOUND)
 
   def update_plot(self, reading_type: ReadingType):
     plot_title = ''
@@ -135,17 +134,11 @@ class PlotView:
     if len(readings) > 0:
       (_, date_strings, values, _) = list(zip(*readings))
       dates = [datetime.strptime(date_str, self.db_context.DATETIME_FORMAT) for date_str in date_strings]
-    mpl.rcParams['text.color'] = 'white'
-    mpl.rcParams['axes.labelcolor'] = 'white'
-    mpl.rcParams['xtick.color'] = 'white'
-    mpl.rcParams['ytick.color'] = 'white'
     fig = plt.figure(facecolor='#222222')
     ax = plt.axes()
     ax.plot(dates, values, 'g-', dates, values, 'r.')
 
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
-    # plt.plot(dates, values, 'g-')
-    # plt.plot(dates, values, 'r.')
     plt.xlabel('Date')
     plt.ylabel(ylabel)
     plt.title(plot_title)
