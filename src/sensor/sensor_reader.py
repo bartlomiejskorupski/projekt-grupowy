@@ -21,6 +21,10 @@ class SensorReader(Thread):
 
   event_queue: Queue[AppEvent]
 
+  prev_humid_reading: float = None
+  prev_temp_reading: float = None
+  prev_reading_time: datetime = None
+
   def __init__(self, event_queue: Queue, reading_delay: int):
     """ reading_delay - time between readings in milliseconds """
     Thread.__init__(self)
@@ -34,18 +38,29 @@ class SensorReader(Thread):
 
   def run(self):
     while True:
-      LOG.debug('Reading started...')
+      LOG.info('Reading started...')
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_STARTED, {}))
 
-      humidity, temperature = self.getHumidityAndTemperatureReading()
-      sound = self.getSoundReading()
+      # read_retry takes anywhere from 0 to 30 seconds to complete
+      humidity, temperature = DHT.read_retry(self.sensor, self.pin)
+      
+      reading_valid = self.is_valid_reading(humidity, temperature)
 
-      LOG.debug('Reading finished.')
+      dt_now = datetime.now()
+      self.prev_humid_reading = humidity
+      self.prev_temp_reading = temperature
+      self.prev_reading_time = dt_now
+
+      if not reading_valid:
+        LOG.error('Reading finished with an error. Retrying...')
+        continue
+
+      LOG.info('Reading finished.')
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_FINISHED, {
         'temperature': temperature,
         'humidity': humidity,
-        'sound': sound,
-        'datetime': datetime.now()
+        'sound': 0.0,
+        'datetime': dt_now
       }))
 
       self.e.wait(self.reading_delay)
@@ -57,11 +72,43 @@ class SensorReader(Thread):
     self.running = False
     self.e.set()
 
-  def getHumidityAndTemperatureReading(self) -> tuple[float, float]:
-    # read_retry takes anywhere from 0 to 30 seconds to complete
-    humid, temp = DHT.read_retry(self.sensor, self.pin)
-    return (humid, temp)
+  def is_valid_reading(self, humidity: float, temperature: float) -> bool:
+    # Check humidity
+    if not 0.0 <= humidity <= 100.0:
+      LOG.error(f'Invalid humidity value: {humidity}')
+      return False
+    
+    # Check for changes that are too big compared to previous measurements
 
-  def getSoundReading(self) -> float:
-    # TODO: Implement method
-    return 0.0
+    # Ignore first readings
+    if not self.prev_humid_reading or not self.prev_temp_reading or not self.prev_reading_time:
+      return True
+    
+    # Max change per second
+    MAX_HUMID_CHANGE = 1.0
+    MAX_TEMP_CHANGE = 1.0
+
+    dt_now = datetime.now()
+    td = dt_now - self.prev_reading_time
+    passed_seconds = td.total_seconds()
+
+    humid_change = None
+    temp_change = None
+    if passed_seconds < 1.0:
+      humid_change = abs(humidity - self.prev_humid_reading)
+      temp_change = abs(temperature - self.prev_temp_reading)
+    else:
+      humid_change = abs(humidity - self.prev_humid_reading) / passed_seconds
+      temp_change = abs(temperature - self.prev_temp_reading) / passed_seconds
+
+    if humid_change > MAX_HUMID_CHANGE or temp_change > MAX_TEMP_CHANGE:
+      LOG.error('Reading change is too high.')
+      LOG.debug(f'''
+        Reading = ({humidity}, {temperature}).
+        Previous reading = ({self.prev_humid_reading}, {self.prev_temp_reading})
+        Change = ({humid_change}, {temp_change})
+        Max change = ({MAX_HUMID_CHANGE}, {MAX_TEMP_CHANGE})
+      ''')
+      return False
+    
+    return True

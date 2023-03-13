@@ -13,25 +13,28 @@ min_reading = {
   'temperature': 15.0
 }
 
-temperature_change = 0.1
-humidity_change = 0.1
+counter = 4
 
 def read_retry(sensor, pin) -> tuple[float, float]:
-  global temperature_change, humidity_change, min_reading, max_reading, last_reading
+  global temperature_change, humidity_change, min_reading, max_reading, last_reading, counter
 
-  retry_time = choice([0, 2, 4, 6])
+  # retry_time = choice([0, 2, 4, 6])
+  retry_time = choice([0])
+  # print('AAA MIMIMIMIMIMIMI')
+  sleep(retry_time)
+  # print('WOKE')
 
-  hd = (random()*0.02)-0.01
-  td = (random()*0.02)-0.01
-  temperature_change = temperature_change + td
-  humidity_change = humidity_change + hd
+  counter -= 1
+  if counter == 0:
+    counter = 4
+    return (16.0, 10.0)
+
+  humidity_change = (random()*0.2)-0.1
+  temperature_change = (random()*0.2)-0.1
 
   last_reading = (
     min(max(last_reading[0] + humidity_change, min_reading['humidity']), max_reading['humidity']),
     min(max(last_reading[1] + temperature_change, min_reading['temperature']), max_reading['temperature'])
   )
-
-  # print('AAA MIMIMIMIMIMIMI')
-  sleep(retry_time)
-  # print('WOKE')
+  
   return last_reading
