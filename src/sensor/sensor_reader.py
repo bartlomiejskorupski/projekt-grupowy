@@ -101,14 +101,16 @@ class SensorReader(Thread):
       humid_change = abs(humidity - self.prev_humid_reading) / passed_seconds
       temp_change = abs(temperature - self.prev_temp_reading) / passed_seconds
 
-    if humid_change > MAX_HUMID_CHANGE or temp_change > MAX_TEMP_CHANGE:
-      LOG.error('Reading change is too high.')
-      LOG.debug(f'''
+    LOG.debug(f'''
         Reading = ({humidity}, {temperature}).
         Previous reading = ({self.prev_humid_reading}, {self.prev_temp_reading})
+        Seconds passed = {passed_seconds}s
         Change = ({humid_change}, {temp_change})
         Max change = ({MAX_HUMID_CHANGE}, {MAX_TEMP_CHANGE})
       ''')
+
+    if humid_change > MAX_HUMID_CHANGE or temp_change > MAX_TEMP_CHANGE:
+      LOG.error('Reading change is too high.')
       return False
     
     return True
