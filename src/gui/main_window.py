@@ -15,6 +15,10 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 class MainWindow:
+  '''
+  Window containing all elements of the application.
+  '''
+
   app: App
   db_context: LocalContext
   
@@ -23,13 +27,15 @@ class MainWindow:
   home_view: HomeView
   settings_view: SettingsView
   plot_view: PlotView
-  # humidity_view: HumidityView
-  # sound_view: SoundView
 
   READING_DELAY = 10_000
+  """ Delay between readings in ms """
+
   sensor_thread: SensorReader
   QUEUE_PROCESSING_DELAY = 100
   event_queue: Queue[AppEvent]
+  """ One-way event queue used for communicating with the SensorReader thread """
+  
 
   def __init__(self):
     self.app = App(
@@ -40,39 +46,50 @@ class MainWindow:
     self.app.font = 'Ubuntu'
     self.app.text_size = 8
     self.app.text_color = 'white'
-    self.app.when_key_pressed = self.key_pressed
     self.app.when_closed = self.close_app
+
     if env.FULL_SCREEN:
       self.app.set_full_screen()
 
+    # Initialize local database connection
     self.db_context = LocalContext()
+
+    # Initialize SensorReader event queue and start the processing method
     self.event_queue = Queue()
     self.app.after(time=self.QUEUE_PROCESSING_DELAY, function=self.process_queue)
 
-    # init components
+    # Initialize components
     LOG.debug('Initializing components')
     self.top_panel = TopPanel(self)
-    Box(self.app,layout='auto',align='top',height=0,width='fill',border=True)
+    Box(self.app,layout='auto',align='top',height=0,width='fill',border=True) # Horizontal line
     self.side_panel = SidePanel(self)
-    Box(self.app,layout='auto',align='left',height='fill',width=0,border=True)
-    # init views
-    self.home_view = HomeView(self)
-    self.home_view.container.visible = True
+    Box(self.app,layout='auto',align='left',height='fill',width=0,border=True) # Vertical line
+
     self.side_panel.clear_buttons_bg()
     self.side_panel.home_button.bg = self.side_panel.HIGHLIGHTED_COLOR
+
+    # Initialize views
+    self.home_view = HomeView(self)
     self.settings_view = SettingsView(self)
-    self.settings_view.container.visible = False
     self.plot_view = PlotView(self)
-    self.plot_view.container.visible = False
+
+    # Setting home as the default view
+    self.home_button_click()
+
     # Initial plot update
     self.settings_view.save_button_click()
 
+    # Initializing and starting the SensorReader thread
     self.sensor_thread = SensorReader(self.event_queue, self.READING_DELAY)
     self.sensor_thread.start()
 
+  def open(self):
     self.app.display()
   
   def process_queue(self):
+    '''
+    This method reads and processes SensorReader thread's messages from the event queue. 
+    '''
     while self.event_queue.qsize():
       try:
         e = self.event_queue.get(block=False)
@@ -81,7 +98,7 @@ class MainWindow:
         elif e.event_type == AppEventType.SENSOR_READING_FINISHED:
           temp, humid, sound, date = e.data['temperature'], e.data['humidity'], e.data['sound'], e.data['datetime']
           if temp is None:
-            LOG.warning('Reading failed after 15 tries...')
+            LOG.warning('Reading failed.')
           else:
             LOG.debug(f'Measured temperature: {temp}')
             self.db_context.save_reading(Reading(date, temp, ReadingType.TEMPERATURE))
@@ -90,11 +107,8 @@ class MainWindow:
           self.home_view.update_reading_texts(temp, humid, sound, self.READING_DELAY)
       except Empty:
         LOG.debug('Queue is empty.')
+    # Again start the process_queue method after a delay
     self.app.after(time=self.QUEUE_PROCESSING_DELAY, function=self.process_queue)
-    
-  def key_pressed(self, event):
-    if event.key == '\u001B':
-      pass
   
   def home_button_click(self):
     self.hide_all_views()
