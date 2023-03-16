@@ -8,6 +8,10 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 class HomeView:
+  '''
+  Home view containing last reading data and time until next reading
+  '''
+
   main_window = None
   db_context: LocalContext
 

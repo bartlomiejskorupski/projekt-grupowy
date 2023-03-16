@@ -15,6 +15,10 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 class PlotView:
+  '''
+  View containing all 3 plots. Only one plot should be visible at a time.
+  '''
+
   main_window = None
   db_context: LocalContext
   container: Box

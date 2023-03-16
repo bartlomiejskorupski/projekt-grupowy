@@ -10,6 +10,10 @@ import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
 class SettingsView:
+  '''
+  View used for setting datetime intervals for plot view.
+  '''
+
   main_window = None
   db_context: LocalContext
 

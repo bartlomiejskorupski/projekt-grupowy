@@ -10,6 +10,10 @@ LOG = logger.getLogger(__name__)
 
 
 class LocalContext:
+  '''
+  Local database connection context.
+  '''
+
   DB_FILENAME = 'data.db'
   db_file_path: str
   connection: sqlite3.Connection

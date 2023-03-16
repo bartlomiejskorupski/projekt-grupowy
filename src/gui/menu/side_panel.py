@@ -5,6 +5,10 @@ from PIL import Image
 from os import path
 
 class SidePanel:
+  '''
+  Side panel containing buttons for routing between views.
+  '''
+
   main_window = None
   app: App
   container: Box

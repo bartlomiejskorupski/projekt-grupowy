@@ -4,6 +4,10 @@ from src.misc.utils import getTimeString, addPadding
 from os import path
 
 class TopPanel:
+  '''
+  Top panel containing app logo, current time and exit button.
+  '''
+
   main_window = None
   app: App
   container: Box
