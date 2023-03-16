@@ -89,22 +89,16 @@ class SensorReader(Thread):
     if not self.prev_humid_reading or not self.prev_temp_reading or not self.prev_reading_time:
       return True
     
-    # Max change per second
-    MAX_HUMID_CHANGE = 1.0
-    MAX_TEMP_CHANGE = 1.0
+    # Max change per reading
+    MAX_HUMID_CHANGE = 10.0
+    MAX_TEMP_CHANGE = 5.0
 
     dt_now = datetime.now()
-    td = dt_now - self.prev_reading_time
-    passed_seconds = td.total_seconds()
+    dt = dt_now - self.prev_reading_time
+    passed_seconds = dt.total_seconds()
 
-    humid_change = None
-    temp_change = None
-    if passed_seconds < 1.0:
-      humid_change = abs(humidity - self.prev_humid_reading)
-      temp_change = abs(temperature - self.prev_temp_reading)
-    else:
-      humid_change = abs(humidity - self.prev_humid_reading) / passed_seconds
-      temp_change = abs(temperature - self.prev_temp_reading) / passed_seconds
+    humid_change = abs(humidity - self.prev_humid_reading)
+    temp_change = abs(temperature - self.prev_temp_reading)
 
     LOG.debug(f'''
         Reading = ({humidity}, {temperature}).
