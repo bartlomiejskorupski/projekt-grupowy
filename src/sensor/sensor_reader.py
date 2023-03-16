@@ -73,6 +73,11 @@ class SensorReader(Thread):
     self.e.set()
 
   def is_valid_reading(self, humidity: float, temperature: float) -> bool:
+    # Check if reading failed
+    if not humidity or not temperature:
+      LOG.error('Reading is null')
+      return False
+
     # Check humidity
     if not 0.0 <= humidity <= 100.0:
       LOG.error(f'Invalid humidity value: {humidity}')
