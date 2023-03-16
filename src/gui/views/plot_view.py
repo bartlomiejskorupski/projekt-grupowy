@@ -1,7 +1,6 @@
-from guizero import Box, Text, PushButton, Picture
+from guizero import Box, Picture
 from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
-from src.misc.utils import addPadding
 from src.model.reading import ReadingType
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt

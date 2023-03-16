@@ -1,7 +1,6 @@
-from guizero import App, Box, Text, PushButton
+from guizero import App, Box, PushButton
 from env import DEBUG_BORDER, PROJECT_PATH
-from src.misc.utils import getTimeString, addPadding
-from PIL import Image
+from src.misc.utils import addPadding
 from os import path
 
 class SidePanel:

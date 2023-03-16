@@ -22,7 +22,7 @@ class SettingsView:
   button_box: Box
   save_button: PushButton
   reset_button: PushButton
-  validate_button: PushButton
+  # validate_button: PushButton
 
   temp_box: Box
   humidity_box: Box
@@ -131,11 +131,11 @@ class SettingsView:
     
     Box(self.button_box, align='right', height='fill', width=10, border=DEBUG_BORDER)
 
-    self.validate_button = PushButton(
-      self.button_box,
-      align='right',
-      text='Validate',
-      command=self.validate_button_click)
+    # self.validate_button = PushButton(
+    #   self.button_box,
+    #   align='right',
+    #   text='Validate',
+    #   command=self.validate_button_click)
 
     sound_header_box = Box(self.sound_box, align='top', width='fill', border=DEBUG_BORDER)
     Text(sound_header_box, align='left', text='Sound', size=10)
@@ -435,6 +435,10 @@ class SettingsView:
       error('Error', '"From date" must be less than "To date"')
       return
 
+    self.update_plots()
+    info('Success', 'Plots updated')
+  
+  def update_plots(self):
     self.main_window.plot_view.update_plots(
       self.temp_from_date,
       self.temp_to_date,
@@ -442,7 +446,7 @@ class SettingsView:
       self.humidity_to_date,
       self.sound_from_date,
       self.sound_to_date)
-  
+
   def reset_button_click(self):
     self.temp_from_date = self.DEFAULT_FROM_DATE
     self.temp_to_date = self.DEFAULT_TO_DATE
@@ -457,30 +461,30 @@ class SettingsView:
     self.sound_from_tb.value = getDateString(self.sound_from_date)
     self.sound_to_tb.value = getDateString(self.sound_to_date)
 
-  def validate_button_click(self):
-    LOG.info('Validating temperature and humidity readings')
-    temp_readings = self.db_context.fetch_readings(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
-    humid_readings = self.db_context.fetch_readings(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
+  # def validate_button_click(self):
+  #   LOG.info('Validating temperature and humidity readings')
+  #   temp_readings = self.db_context.fetch_readings(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
+  #   humid_readings = self.db_context.fetch_readings(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
     
-    if len(humid_readings) == 0:
-      LOG.info('No readings in selected time period')
-      return
+  #   if len(humid_readings) == 0:
+  #     LOG.info('No readings in selected time period')
+  #     return
 
-    bad_humid_readings = list(filter(lambda r: r[2] > 100.0 or r[2] < 0.0, humid_readings))
-    bad_dates = list(map(lambda r: r[1], bad_humid_readings))
-    bad_temp_readings = list(filter(lambda r: r[1] in bad_dates, temp_readings))
-    bad_readings = bad_humid_readings + bad_temp_readings
-    bad_ids = list(map(lambda r: r[0], bad_readings))
-    LOG.info(f'Found {len(bad_ids)} bad readings')
+  #   bad_humid_readings = list(filter(lambda r: r[2] > 100.0 or r[2] < 0.0, humid_readings))
+  #   bad_dates = list(map(lambda r: r[1], bad_humid_readings))
+  #   bad_temp_readings = list(filter(lambda r: r[1] in bad_dates, temp_readings))
+  #   bad_readings = bad_humid_readings + bad_temp_readings
+  #   bad_ids = list(map(lambda r: r[0], bad_readings))
+  #   LOG.info(f'Found {len(bad_ids)} bad readings')
 
-    if len(bad_readings) == 0:
-      info('Validation', 'No bad readings detected')
-      return
+  #   if len(bad_readings) == 0:
+  #     info('Validation', 'No bad readings detected')
+  #     return
 
-    if not yesno('Validation', f'{len(bad_ids)} bad readings detected. Do you want to delete them from the database?'):
-      return
+  #   if not yesno('Validation', f'{len(bad_ids)} bad readings detected. Do you want to delete them from the database?'):
+  #     return
 
-    LOG.info(f'Deleting {len(bad_ids)} records from the database')
-    self.db_context.delete_readings(bad_ids)
+  #   LOG.info(f'Deleting {len(bad_ids)} records from the database')
+  #   self.db_context.delete_readings(bad_ids)
 
 

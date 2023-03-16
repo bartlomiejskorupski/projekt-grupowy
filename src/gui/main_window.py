@@ -1,5 +1,5 @@
 from queue import Queue, Empty
-from guizero import App, Box, Text, PushButton
+from guizero import App, Box
 import env
 from src.gui.views.settings_view import SettingsView
 from src.gui.views.plot_view import PlotView
@@ -77,7 +77,7 @@ class MainWindow:
     self.home_button_click()
 
     # Initial plot update
-    self.settings_view.save_button_click()
+    self.settings_view.update_plots()
 
     # Initializing and starting the SensorReader thread
     self.sensor_thread = SensorReader(self.event_queue, self.READING_DELAY)

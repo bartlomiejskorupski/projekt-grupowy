@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from enum import Enum
-from re import A
 
 class AppEventType(Enum):
   SENSOR_READING_STARTED = 'SENSOR_READING_START'

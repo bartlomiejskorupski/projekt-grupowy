@@ -1,10 +1,7 @@
 from datetime import datetime
 from queue import Queue
 from threading import Thread, Event
-from typing import Callable
 from src.model.app_event import AppEvent, AppEventType
-from src.database.local_context import LocalContext
-from src.model.reading import Reading
 import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
 
@@ -26,7 +23,7 @@ class SensorReader(Thread):
   prev_reading_time: datetime = None
 
   def __init__(self, event_queue: Queue, reading_delay: int):
-    """ reading_delay - time between readings in milliseconds """
+    ''' reading_delay - time between readings in milliseconds '''
     Thread.__init__(self)
     self.daemon = True
     self.sensor = DHT.DHT22
