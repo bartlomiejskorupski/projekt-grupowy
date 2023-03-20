@@ -1,9 +1,10 @@
 from guizero import Box, Text, PushButton, TextBox, error, yesno, info
 from src.database.local_context import LocalContext
 from env import DEBUG_BORDER
-from src.misc.utils import addPadding, getDateString, getDateTimeString
+from src.misc.utils import addPadding, getDateString
 from datetime import datetime, timedelta
 from src.model.reading import ReadingType
+from src.database.remote_context import RemoteContext
 
 
 import src.misc.logger as logger
@@ -16,13 +17,17 @@ class SettingsView:
 
   main_window = None
   db_context: LocalContext
+  remote_context: RemoteContext
 
   container: Box
 
   button_box: Box
   save_button: PushButton
   reset_button: PushButton
-  # validate_button: PushButton
+  test_button: PushButton
+  export_button: PushButton
+  import_button: PushButton
+
 
   temp_box: Box
   humidity_box: Box
@@ -53,20 +58,21 @@ class SettingsView:
   sound_from_date: datetime
   sound_to_date: datetime
 
-  DEFAULT_FROM_DATE = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
-  DEFAULT_TO_DATE = datetime.now().replace(hour=23, minute=59, second=59)
-
   def __init__(self, main_window):
     self.main_window = main_window
     self.db_context = self.main_window.db_context
+    self.remote_context = self.main_window.remote_context
     # LOG.debug(f'From: {getDateTimeString(self.DEFAULT_FROM_DATE)} To: {getDateTimeString(self.DEFAULT_TO_DATE)}')
 
-    self.temp_from_date = self.DEFAULT_FROM_DATE
-    self.temp_to_date = self.DEFAULT_TO_DATE
-    self.humidity_from_date = self.DEFAULT_FROM_DATE
-    self.humidity_to_date = self.DEFAULT_TO_DATE
-    self.sound_from_date = self.DEFAULT_FROM_DATE
-    self.sound_to_date = self.DEFAULT_TO_DATE
+    DEFAULT_FROM_DATE = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
+    DEFAULT_TO_DATE = datetime.now().replace(hour=23, minute=59, second=59)
+
+    self.temp_from_date = DEFAULT_FROM_DATE
+    self.temp_to_date = DEFAULT_TO_DATE
+    self.humidity_from_date = DEFAULT_FROM_DATE
+    self.humidity_to_date = DEFAULT_TO_DATE
+    self.sound_from_date = DEFAULT_FROM_DATE
+    self.sound_to_date = DEFAULT_TO_DATE
 
     self.container = Box(
       self.main_window.app,
@@ -131,11 +137,27 @@ class SettingsView:
     
     Box(self.button_box, align='right', height='fill', width=10, border=DEBUG_BORDER)
 
-    # self.validate_button = PushButton(
-    #   self.button_box,
-    #   align='right',
-    #   text='Validate',
-    #   command=self.validate_button_click)
+    self.export_button = PushButton(
+      self.button_box,
+      align='right',
+      text='Export',
+      command=self.export_button_click)
+    
+    Box(self.button_box, align='right', height='fill', width=10, border=DEBUG_BORDER)
+
+    self.import_button = PushButton(
+      self.button_box,
+      align='right',
+      text='Import',
+      command=self.import_button_click)
+
+    Box(self.button_box, align='right', height='fill', width=10, border=DEBUG_BORDER)
+
+    self.test_button = PushButton(
+      self.button_box,
+      align='right',
+      text='Test',
+      command=self.test_button_click)
 
     sound_header_box = Box(self.sound_box, align='top', width='fill', border=DEBUG_BORDER)
     Text(sound_header_box, align='left', text='Sound', size=10)
@@ -448,43 +470,37 @@ class SettingsView:
       self.sound_to_date)
 
   def reset_button_click(self):
-    self.temp_from_date = self.DEFAULT_FROM_DATE
-    self.temp_to_date = self.DEFAULT_TO_DATE
+    DEFAULT_FROM_DATE = datetime.now().replace(hour=0, minute=0, second=0) - timedelta(days=1)
+    DEFAULT_TO_DATE = datetime.now().replace(hour=23, minute=59, second=59)
+
+    self.temp_from_date = DEFAULT_FROM_DATE
+    self.temp_to_date = DEFAULT_TO_DATE
     self.temp_from_tb.value = getDateString(self.temp_from_date)
     self.temp_to_tb.value = getDateString(self.temp_to_date)
-    self.humidity_from_date = self.DEFAULT_FROM_DATE
-    self.humidity_to_date = self.DEFAULT_TO_DATE
+    self.humidity_from_date = DEFAULT_FROM_DATE
+    self.humidity_to_date = DEFAULT_TO_DATE
     self.humidity_from_tb.value = getDateString(self.humidity_from_date)
     self.humidity_to_tb.value = getDateString(self.humidity_to_date)
-    self.sound_from_date = self.DEFAULT_FROM_DATE
-    self.sound_to_date = self.DEFAULT_TO_DATE
+    self.sound_from_date = DEFAULT_FROM_DATE
+    self.sound_to_date = DEFAULT_TO_DATE
     self.sound_from_tb.value = getDateString(self.sound_from_date)
     self.sound_to_tb.value = getDateString(self.sound_to_date)
 
-  # def validate_button_click(self):
-  #   LOG.info('Validating temperature and humidity readings')
-  #   temp_readings = self.db_context.fetch_readings(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
-  #   humid_readings = self.db_context.fetch_readings(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
-    
-  #   if len(humid_readings) == 0:
-  #     LOG.info('No readings in selected time period')
-  #     return
+  def test_button_click(self):
+    pass
 
-  #   bad_humid_readings = list(filter(lambda r: r[2] > 100.0 or r[2] < 0.0, humid_readings))
-  #   bad_dates = list(map(lambda r: r[1], bad_humid_readings))
-  #   bad_temp_readings = list(filter(lambda r: r[1] in bad_dates, temp_readings))
-  #   bad_readings = bad_humid_readings + bad_temp_readings
-  #   bad_ids = list(map(lambda r: r[0], bad_readings))
-  #   LOG.info(f'Found {len(bad_ids)} bad readings')
+  def export_button_click(self):
+    if not yesno('Export', 'Are you sure you want to export local data to the remote database?'):
+      return
 
-  #   if len(bad_readings) == 0:
-  #     info('Validation', 'No bad readings detected')
-  #     return
+    readings = self.db_context.fetch_all()
+    success = self.remote_context.export_to_remote(readings)
 
-  #   if not yesno('Validation', f'{len(bad_ids)} bad readings detected. Do you want to delete them from the database?'):
-  #     return
+    if success:
+      info('Exported', 'Local data exported to remote database.')
+    else:
+      error('Error', 'Error connecting to the database. Check your network connection.')
 
-  #   LOG.info(f'Deleting {len(bad_ids)} records from the database')
-  #   self.db_context.delete_readings(bad_ids)
-
+  def import_button_click(self):
+    error('Error', 'Not implemented')
 

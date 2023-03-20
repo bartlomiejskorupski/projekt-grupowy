@@ -10,6 +10,7 @@ from src.gui.views.home_view import HomeView
 from src.gui.menu.side_panel import SidePanel
 from src.gui.menu.top_panel import TopPanel
 from src.database.local_context import LocalContext
+from src.database.remote_context import RemoteContext
 
 import src.misc.logger as logger
 LOG = logger.getLogger(__name__)
@@ -21,6 +22,7 @@ class MainWindow:
 
   app: App
   db_context: LocalContext
+  remote_context: RemoteContext
   
   top_panel: TopPanel
   side_panel: SidePanel
@@ -51,8 +53,9 @@ class MainWindow:
     if env.FULL_SCREEN:
       self.app.set_full_screen()
 
-    # Initialize local database connection
+    # Initialize database connection
     self.db_context = LocalContext()
+    self.remote_context = RemoteContext()
 
     # Initialize SensorReader event queue and start the processing method
     self.event_queue = Queue()

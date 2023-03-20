@@ -68,7 +68,11 @@ class LocalContext:
     self.connection.commit()
     return cur.lastrowid
   
-  def fetch_readings(self, type: ReadingType, date_from: datetime, date_to: datetime):
+  def fetch_readings(self, type: ReadingType, date_from: datetime, date_to: datetime) -> list[tuple]:
+    '''
+    Returns:
+      List of tuples in a format: (id: int, date_str: str, value: float, type: str)
+    '''
     cur = self.connection.cursor()
     date_from_str = date_from.strftime(self.DATETIME_FORMAT)
     date_to_str = date_to.strftime(self.DATETIME_FORMAT)
@@ -79,7 +83,7 @@ class LocalContext:
     LOG.info(f'Fetched {len(readings)} readings')
     return readings
 
-  def fetch_all(self):
+  def fetch_all(self) -> list[tuple]:
     cur = self.connection.cursor()
     LOG.info(f'Fetching all readings')
     sql = f'SELECT * FROM readings'

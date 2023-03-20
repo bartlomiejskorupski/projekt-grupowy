@@ -78,6 +78,8 @@ Running the application
 python3 main.py [options]
 ```
 Options:
+- --prod - production environment
 - --debug-border - show box borders
 - --full-screen - open in full screen mode
 - --project-path - set project path (changes path from relative to absolute for image loading)
+- --firebase-cert-path - absolute path to the firebase certificate file
