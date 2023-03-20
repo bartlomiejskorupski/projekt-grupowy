@@ -40,6 +40,9 @@ class RemoteContext:
       True if export was successfull or False if an error occurs during communication with remote database
     '''
 
+    if not self.fb_app:
+      return False
+
     ref = db.reference('/')
     LOG.debug('Firebase database reference created')
 

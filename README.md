@@ -69,7 +69,7 @@ In this file, add the following lines:
 [Desktop Entry]
 Type=Application
 Name=SensorManager
-Exec=/usr/bin/python3 /path/to/project/main.py --full-screen --project-path=/path/to/project
+Exec=/usr/bin/python3 /path/to/project/main.py --full-screen --project-path=/path/to/project --prod --firebase-cert-path=/path/to/firebase_cert.json
 ```
 Reboot
 ## Usage
