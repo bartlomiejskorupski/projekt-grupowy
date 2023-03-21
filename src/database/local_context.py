@@ -5,8 +5,8 @@ from src.model.reading import Reading, ReadingType
 from src.misc.utils import getDateTimeString
 from datetime import datetime
 
-import src.misc.logger as logger
-LOG = logger.getLogger(__name__)
+from src.misc.logger import getLogger
+LOG = getLogger(__name__)
 
 
 class LocalContext:

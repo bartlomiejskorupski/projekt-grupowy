@@ -10,8 +10,8 @@ from PIL import Image
 from io import BytesIO
 
 
-import src.misc.logger as logger
-LOG = logger.getLogger(__name__)
+from src.misc.logger import getLogger
+LOG = getLogger(__name__)
 
 class PlotView:
   '''

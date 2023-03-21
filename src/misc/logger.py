@@ -1,5 +1,5 @@
 import logging
-from os.path import join
+import os.path
 from env import DATA_FOLDER_PATH
 from datetime import datetime
 
@@ -18,7 +18,7 @@ def getLogger(module_name: str) -> logging.Logger:
   console_handler.setFormatter(formatter)
   logger.addHandler(console_handler)
 
-  path = join(DATA_FOLDER_PATH, dt_string + '.log')
+  path = os.path.join(DATA_FOLDER_PATH, 'logs', dt_string + '.log')
   file_handler = logging.FileHandler(filename=path, encoding='utf-8')
   file_handler.setLevel(logging.DEBUG)
   file_handler.setFormatter(formatter)

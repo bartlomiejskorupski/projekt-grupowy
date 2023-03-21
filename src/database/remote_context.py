@@ -44,7 +44,6 @@ class RemoteContext:
       return False
 
     ref = db.reference('/')
-    LOG.debug('Firebase database reference created')
 
     exported_dict = {
       "readings": {}

@@ -4,8 +4,8 @@ from env import DEBUG_BORDER
 from src.misc.utils import addPadding
 from math import floor
 
-import src.misc.logger as logger
-LOG = logger.getLogger(__name__)
+from src.misc.logger import getLogger
+LOG = getLogger(__name__)
 
 class HomeView:
   '''

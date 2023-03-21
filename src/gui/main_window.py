@@ -12,8 +12,8 @@ from src.gui.menu.top_panel import TopPanel
 from src.database.local_context import LocalContext
 from src.database.remote_context import RemoteContext
 
-import src.misc.logger as logger
-LOG = logger.getLogger(__name__)
+from src.misc.logger import getLogger
+LOG = getLogger(__name__)
 
 class MainWindow:
   '''

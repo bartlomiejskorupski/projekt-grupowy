@@ -2,8 +2,8 @@ from datetime import datetime
 from queue import Queue
 from threading import Thread, Event
 from src.model.app_event import AppEvent, AppEventType
-import src.misc.logger as logger
-LOG = logger.getLogger(__name__)
+from src.misc.logger import getLogger
+LOG = getLogger(__name__)
 
 try:
   import Adafruit_DHT as DHT

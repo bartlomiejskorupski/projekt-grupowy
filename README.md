@@ -16,8 +16,8 @@ System monitorujący na bazie komputera Raspberry Pi
 sudo apt update
 sudo apt upgrade
 
-sudo mkdir /var/lib/sensormanager
-sudo chmod -R 777 /var/lib/sensormanager
+sudo mkdir -p /var/lib/sensormanager/logs
+sudo chmod -R 777 /var/lib/sensormanager /var/lib/sensormanager/logs
 
 sudo apt-get install python-dev libatlas-base-dev
 pip install -r requirements.txt
