@@ -13,10 +13,8 @@ class RemoteContext:
   ''' Firebase application. None if certificate wasn't loaded. '''
 
   def __init__(self):
-    cert_path = FIREBASE_CERTIFICATE_PATH if PRODUCTION else '/home/bartek/Downloads/fb_cred.json'
-
     try:
-      cred = credentials.Certificate(cert_path)
+      cred = credentials.Certificate(FIREBASE_CERTIFICATE_PATH)
       LOG.info('Firebase certificate loaded successfully')
       self.fb_app = fba.initialize_app(cred, {
         'databaseURL': REMOTE_DATABASE_URL,
@@ -39,6 +37,9 @@ class RemoteContext:
     Returns:
       True if export was successfull or False if an error occurs during communication with remote database
     '''
+
+    # if not PRODUCTION:
+    #   return False
 
     if not self.fb_app:
       return False
