@@ -28,7 +28,6 @@ class SettingsView:
   export_button: PushButton
   import_button: PushButton
 
-
   temp_box: Box
   humidity_box: Box
   sound_box: Box
@@ -50,6 +49,10 @@ class SettingsView:
   sound_to_box: Box
   sound_to_buttons: Box
   sound_to_tb: TextBox
+
+  temp_number_text: Text
+  humidity_number_text: Text
+  sound_number_text: Text
 
   temp_from_date: datetime
   temp_to_date: datetime
@@ -85,6 +88,10 @@ class SettingsView:
 
     addPadding(self.container, 10)
 
+    RECORDS_NUM_PREFIX = 'Records: '
+
+    # Temperature
+
     self.temp_box = Box(
       self.container,
       layout='auto',
@@ -95,7 +102,53 @@ class SettingsView:
     
     temp_header_box = Box(self.temp_box, align='top', width='fill', border=DEBUG_BORDER)
     Text(temp_header_box, align='left', text='Temperature', size=10)
-    
+    self.temp_number_text = Text(temp_header_box, align='right', text='0')
+    Text(temp_header_box, align='right', text=RECORDS_NUM_PREFIX)
+
+    self.temp_from_box = Box(
+      self.temp_box,
+      layout='auto',
+      align='left',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(self.temp_from_box, align='left', text='From: ')
+
+    self.create_add_sub_button(self.temp_from_box, self.temp_from_day_subtract_button_click, '<')
+
+    self.temp_from_tb = TextBox(
+      self.temp_from_box,
+      align='left',
+      text=f'{getDateString(self.temp_from_date)}',
+      enabled=True)
+    self.temp_from_tb.text_size = 12
+
+    self.create_add_sub_button(self.temp_from_box, self.temp_from_day_add_button_click, '>')
+
+    self.temp_to_box = Box(
+      self.temp_box,
+      layout='auto',
+      align='left',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(self.temp_to_box, align='left', text='To: ')
+
+    self.create_add_sub_button(self.temp_to_box, self.temp_to_day_subtract_button_click, '<')
+
+    self.temp_to_tb = TextBox(
+      self.temp_to_box,
+      align='left',
+      text=f'{getDateString(self.temp_to_date)}',
+      enabled=True)
+    self.temp_to_tb.text_size = 12
+
+    self.create_add_sub_button(self.temp_to_box, self.temp_to_day_add_button_click, '>')
+
+    # Humidity
+
     self.humidity_box = Box(
       self.container,
       layout='auto',
@@ -106,7 +159,53 @@ class SettingsView:
     
     humidity_header_box = Box(self.humidity_box, align='top', width='fill', border=DEBUG_BORDER)
     Text(humidity_header_box, align='left', text='Humidity', size=10)
+    self.humidity_number_text = Text(humidity_header_box, align='right', text='0')
+    Text(humidity_header_box, align='right', text=RECORDS_NUM_PREFIX)
     
+    self.humidity_from_box = Box(
+      self.humidity_box,
+      layout='auto',
+      align='left',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(self.humidity_from_box, align='left', text='From: ')
+
+    self.create_add_sub_button(self.humidity_from_box, self.humidity_from_day_subtract_button_click, '<')
+
+    self.humidity_from_tb = TextBox(
+      self.humidity_from_box,
+      align='left',
+      text=f'{getDateString(self.humidity_from_date)}',
+      enabled=True)
+    self.humidity_from_tb.text_size = 12
+
+    self.create_add_sub_button(self.humidity_from_box, self.humidity_from_day_add_button_click, '>')
+
+    self.humidity_to_box = Box(
+      self.humidity_box,
+      layout='auto',
+      align='left',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(self.humidity_to_box, align='left', text='To: ')
+
+    self.create_add_sub_button(self.humidity_to_box, self.humidity_to_day_subtract_button_click, '<')
+
+    self.humidity_to_tb = TextBox(
+      self.humidity_to_box,
+      align='left',
+      text=f'{getDateString(self.humidity_to_date)}',
+      enabled=True)
+    self.humidity_to_tb.text_size = 12
+
+    self.create_add_sub_button(self.humidity_to_box, self.humidity_to_day_add_button_click, '>')
+
+    # Sound
+
     self.sound_box = Box(
       self.container,
       layout='auto',
@@ -115,6 +214,55 @@ class SettingsView:
       height='fill',
       border=DEBUG_BORDER)
     
+    sound_header_box = Box(self.sound_box, align='top', width='fill', border=DEBUG_BORDER)
+    Text(sound_header_box, align='left', text='Sound', size=10)
+    self.sound_number_text = Text(sound_header_box, align='right', text='0')
+    Text(sound_header_box, align='right', text=RECORDS_NUM_PREFIX)
+
+    self.sound_from_box = Box(
+      self.sound_box,
+      layout='auto',
+      align='left',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(self.sound_from_box, align='left', text='From: ')
+
+    self.create_add_sub_button(self.sound_from_box, self.sound_from_day_subtract_button_click, '<')
+
+    self.sound_from_tb = TextBox(
+      self.sound_from_box,
+      align='left',
+      text=f'{getDateString(self.sound_from_date)}',
+      enabled=True)
+    self.sound_from_tb.text_size = 12
+
+    self.create_add_sub_button(self.sound_from_box, self.sound_from_day_add_button_click, '>')
+
+    self.sound_to_box = Box(
+      self.sound_box,
+      layout='auto',
+      align='left',
+      width='fill',
+      height='fill',
+      border=DEBUG_BORDER)
+
+    Text(self.sound_to_box, align='left', text='To: ')
+
+    self.create_add_sub_button(self.sound_to_box, self.sound_to_day_subtract_button_click, '<')
+
+    self.sound_to_tb = TextBox(
+      self.sound_to_box,
+      align='left',
+      text=f'{getDateString(self.sound_to_date)}',
+      enabled=True)
+    self.sound_to_tb.text_size = 12
+
+    self.create_add_sub_button(self.sound_to_box, self.sound_to_day_add_button_click, '>')
+
+    # Buttons
+
     self.button_box = Box(
       self.container,
       align='top',
@@ -158,298 +306,92 @@ class SettingsView:
       align='right',
       text='Test',
       command=self.test_button_click)
-
-    sound_header_box = Box(self.sound_box, align='top', width='fill', border=DEBUG_BORDER)
-    Text(sound_header_box, align='left', text='Sound', size=10)
     
-    # Temperature
-    self.temp_from_box = Box(
-      self.temp_box,
-      layout='auto',
-      align='left',
-      width='fill',
-      height='fill',
-      border=DEBUG_BORDER)
+    # Update record number text
+    self.temp_number_text.value = self.db_context.readings_count(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
+    self.humidity_number_text.value = self.db_context.readings_count(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
+    self.sound_number_text.value = self.db_context.readings_count(ReadingType.SOUND, self.sound_from_date, self.sound_to_date)
+  
+  # Create functions
 
-    Text(
-      self.temp_from_box,
+  def create_add_sub_button(self, container: Box, command, text: str) -> PushButton:
+    b = PushButton(
+      container,
       align='left',
-      text='From: ')
-
-    tfm = PushButton(
-      self.temp_from_box,
-      align='left',
-      command=self.temp_from_day_subtract_button_click,
-      text='<')
-    tfm.text_size = 12
-    tfm.padding(6, 0)
-
-    self.temp_from_tb = TextBox(
-      self.temp_from_box,
-      align='left',
-      text=f'{getDateString(self.temp_from_date)}',
-      enabled=True)
-    self.temp_from_tb.text_size = 12
-
-    tfp = PushButton(
-      self.temp_from_box,
-      align='left',
-      command=self.temp_from_day_add_button_click,
-      text='>'
+      command=command,
+      text=text
     )
-    tfp.text_size = 12
-    tfp.padding(6, 0)
+    b.text_size = 12
+    b.padding(6, 0)
+    return b
 
-    self.temp_to_box = Box(
-      self.temp_box,
-      layout='auto',
-      align='left',
-      width='fill',
-      height='fill',
-      border=DEBUG_BORDER)
 
-    Text(
-      self.temp_to_box,
-      align='left',
-      text='To: ')
-
-    ttm = PushButton(
-      self.temp_to_box,
-      align='left',
-      command=self.temp_to_day_subtract_button_click,
-      text='<'
-    )
-    ttm.text_size = 12
-    ttm.padding(6, 0)
-
-    self.temp_to_tb = TextBox(
-      self.temp_to_box,
-      align='left',
-      text=f'{getDateString(self.temp_to_date)}',
-      enabled=True)
-    self.temp_to_tb.text_size = 12
-
-    ttp = PushButton(
-      self.temp_to_box,
-      align='left',
-      command=self.temp_to_day_add_button_click,
-      text='>'
-    )
-    ttp.text_size = 12
-    ttp.padding(6, 0)
-
-    # Humidity
-
-    self.humidity_from_box = Box(
-      self.humidity_box,
-      layout='auto',
-      align='left',
-      width='fill',
-      height='fill',
-      border=DEBUG_BORDER)
-
-    Text(
-      self.humidity_from_box,
-      align='left',
-      text='From: ')
-
-    hfm = PushButton(
-      self.humidity_from_box,
-      align='left',
-      command=self.humidity_from_day_subtract_button_click,
-      text='<'
-    )
-    hfm.text_size = 12
-    hfm.padding(6, 0)
-
-    self.humidity_from_tb = TextBox(
-      self.humidity_from_box,
-      align='left',
-      text=f'{getDateString(self.humidity_from_date)}',
-      enabled=True)
-    self.humidity_from_tb.text_size = 12
-
-    hfp = PushButton(
-      self.humidity_from_box,
-      align='left',
-      command=self.humidity_from_day_add_button_click,
-      text='>'
-    )
-    hfp.text_size = 12
-    hfp.padding(6, 0)
-
-    self.humidity_to_box = Box(
-      self.humidity_box,
-      layout='auto',
-      align='left',
-      width='fill',
-      height='fill',
-      border=DEBUG_BORDER)
-
-    Text(
-      self.humidity_to_box,
-      align='left',
-      text='To: ')
-
-    htm = PushButton(
-      self.humidity_to_box,
-      align='left',
-      command=self.humidity_to_day_subtract_button_click,
-      text='<'
-    )
-    htm.text_size = 12
-    htm.padding(6, 0)
-
-    self.humidity_to_tb = TextBox(
-      self.humidity_to_box,
-      align='left',
-      text=f'{getDateString(self.humidity_to_date)}',
-      enabled=True)
-    self.humidity_to_tb.text_size = 12
-
-    htp = PushButton(
-      self.humidity_to_box,
-      align='left',
-      command=self.humidity_to_day_add_button_click,
-      text='>'
-    )
-    htp.text_size = 12
-    htp.padding(6, 0)
-
-    # Sound
-
-    self.sound_from_box = Box(
-      self.sound_box,
-      layout='auto',
-      align='left',
-      width='fill',
-      height='fill',
-      border=DEBUG_BORDER)
-
-    Text(
-      self.sound_from_box,
-      align='left',
-      text='From: ')
-
-    sfm = PushButton(
-      self.sound_from_box,
-      align='left',
-      command=self.sound_from_day_subtract_button_click,
-      text='<'
-    )
-    sfm.text_size = 12
-    sfm.padding(6, 0)
-
-    self.sound_from_tb = TextBox(
-      self.sound_from_box,
-      align='left',
-      text=f'{getDateString(self.sound_from_date)}',
-      enabled=True)
-    self.sound_from_tb.text_size = 12
-
-    sfp = PushButton(
-      self.sound_from_box,
-      align='left',
-      command=self.sound_from_day_add_button_click,
-      text='>'
-    )
-    sfp.text_size = 12
-    sfp.padding(6, 0)
-
-    self.sound_to_box = Box(
-      self.sound_box,
-      layout='auto',
-      align='left',
-      width='fill',
-      height='fill',
-      border=DEBUG_BORDER)
-
-    Text(
-      self.sound_to_box,
-      align='left',
-      text='To: ')
-
-    stm = PushButton(
-      self.sound_to_box,
-      align='left',
-      command=self.sound_to_day_subtract_button_click,
-      text='<'
-    )
-    stm.text_size = 12
-    stm.padding(6, 0)
-
-    self.sound_to_tb = TextBox(
-      self.sound_to_box,
-      align='left',
-      text=f'{getDateString(self.sound_to_date)}',
-      enabled=True)
-    self.sound_to_tb.text_size = 12
-
-    stp = PushButton(
-      self.sound_to_box,
-      align='left',
-      command=self.sound_to_day_add_button_click,
-      text='>'
-    )
-    stp.text_size = 12
-    stp.padding(6, 0)
-
+  # Onclicks
   # Temperature
-
   def temp_from_day_add_button_click(self):
     self.temp_from_date = self.temp_from_date + timedelta(days=1)
     self.temp_from_tb.value = getDateString(self.temp_from_date)
+    self.temp_number_text.value = self.db_context.readings_count(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
   
   def temp_from_day_subtract_button_click(self):
     self.temp_from_date = self.temp_from_date - timedelta(days=1)
     self.temp_from_tb.value = getDateString(self.temp_from_date)
+    self.temp_number_text.value = self.db_context.readings_count(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
 
   def temp_to_day_add_button_click(self):
     self.temp_to_date = self.temp_to_date + timedelta(days=1)
     self.temp_to_tb.value = getDateString(self.temp_to_date)
+    self.temp_number_text.value = self.db_context.readings_count(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
   
   def temp_to_day_subtract_button_click(self):
     self.temp_to_date = self.temp_to_date - timedelta(days=1)
     self.temp_to_tb.value = getDateString(self.temp_to_date)
+    self.temp_number_text.value = self.db_context.readings_count(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)
 
   # Humidity
-
   def humidity_from_day_add_button_click(self):
     self.humidity_from_date = self.humidity_from_date + timedelta(days=1)
     self.humidity_from_tb.value = getDateString(self.humidity_from_date)
+    self.humidity_number_text.value = self.db_context.readings_count(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
   
   def humidity_from_day_subtract_button_click(self):
     self.humidity_from_date = self.humidity_from_date - timedelta(days=1)
     self.humidity_from_tb.value = getDateString(self.humidity_from_date)
+    self.humidity_number_text.value = self.db_context.readings_count(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
 
   def humidity_to_day_add_button_click(self):
     self.humidity_to_date = self.humidity_to_date + timedelta(days=1)
     self.humidity_to_tb.value = getDateString(self.humidity_to_date)
+    self.humidity_number_text.value = self.db_context.readings_count(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
   
   def humidity_to_day_subtract_button_click(self):
     self.humidity_to_date = self.humidity_to_date - timedelta(days=1)
     self.humidity_to_tb.value = getDateString(self.humidity_to_date)
+    self.humidity_number_text.value = self.db_context.readings_count(ReadingType.HUMIDITY, self.humidity_from_date, self.humidity_to_date)
 
   # Sound
-
   def sound_from_day_add_button_click(self):
     self.sound_from_date = self.sound_from_date + timedelta(days=1)
     self.sound_from_tb.value = getDateString(self.sound_from_date)
+    self.sound_number_text.value = self.db_context.readings_count(ReadingType.SOUND, self.sound_from_date, self.sound_to_date)
   
   def sound_from_day_subtract_button_click(self):
     self.sound_from_date = self.sound_from_date - timedelta(days=1)
     self.sound_from_tb.value = getDateString(self.sound_from_date)
+    self.sound_number_text.value = self.db_context.readings_count(ReadingType.SOUND, self.sound_from_date, self.sound_to_date)
 
   def sound_to_day_add_button_click(self):
     self.sound_to_date = self.sound_to_date + timedelta(days=1)
     self.sound_to_tb.value = getDateString(self.sound_to_date)
+    self.sound_number_text.value = self.db_context.readings_count(ReadingType.SOUND, self.sound_from_date, self.sound_to_date)
+
   
   def sound_to_day_subtract_button_click(self):
     self.sound_to_date = self.sound_to_date - timedelta(days=1)
     self.sound_to_tb.value = getDateString(self.sound_to_date)
+    self.sound_number_text.value = self.db_context.readings_count(ReadingType.SOUND, self.sound_from_date, self.sound_to_date)
 
-  # save button
-
+  # save
   def save_button_click(self):
     if  self.temp_from_date > self.temp_to_date \
     or self.humidity_from_date > self.humidity_to_date \

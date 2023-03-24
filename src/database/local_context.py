@@ -130,4 +130,16 @@ class LocalContext:
     cur.execute(sql)
     self.connection.commit()
 
+
+  def readings_count(self, type: ReadingType, date_from: datetime, date_to: datetime) -> int:
+    cur = self.connection.cursor()
+
+    date_from_str = date_from.strftime(self.DATETIME_FORMAT)
+    date_to_str = date_to.strftime(self.DATETIME_FORMAT)
+
+    sql = 'SELECT COUNT(1) FROM readings WHERE type=? AND "date" BETWEEN ? AND ?'
+    cur.execute(sql, (type.value, date_from_str, date_to_str))
+    count = cur.fetchone()[0]
+    return count
+
     
