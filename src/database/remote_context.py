@@ -46,25 +46,39 @@ class RemoteContext:
 
     ref = db.reference('/')
 
+    mapped_readings = list(map(lambda r: {'id': r[0], 'date': r[1], 'value': r[2], 'type': r[3]}, readings))
     exported_dict = {
-      "readings": {}
+      'readings': mapped_readings
     }
-    
-    for r in readings:
-      uid, date_str, value, rtype = r
-      exported_dict['readings'][str(uid)] = {
-        'date': date_str,
-        'value': value,
-        'type': rtype
-      }
 
-    success = True
     try:
       ref.set(exported_dict)
       LOG.debug('Firebase database overwritten')
     except:
       LOG.error('Database connection error')
-      success = False
-    return success
+      return False
+    return True
 
 
+  def import_from_remote(self) -> list[tuple]:
+    '''
+    Import data from remote database.
+
+    Returns:
+      readings: List of tuples in a format: (id: int, date_str: str, value: float, type: str)
+    '''
+
+    if not self.fb_app:
+      return False
+
+    ref = db.reference('/readings')
+
+    try:
+      readings = ref.get()
+      mapped_readings = list(map(lambda r: (r['id'], r['date'], r['value'], r['type']), readings))
+      LOG.debug('Remote data imported successfully')
+      return mapped_readings
+    except:
+      LOG.error('Database connection error')
+      return []
+      

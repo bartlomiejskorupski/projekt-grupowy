@@ -68,6 +68,21 @@ class LocalContext:
     self.connection.commit()
     return cur.lastrowid
   
+  def save_readings(self, readings: list[tuple]) -> int:
+    '''
+      Save many readings with ids.
+
+      args:
+        readings: list of tuples in format (id: int, date: str, value: float, type: str)
+    '''
+
+    cur = self.connection.cursor()
+    LOG.debug(f'Saving many readings with ids')
+    sql = 'INSERT INTO readings("id", "date", value, "type") VALUES (?,?,?,?)'
+    cur.executemany(sql, readings)
+    self.connection.commit()
+    return cur.lastrowid
+  
   def fetch_readings(self, type: ReadingType, date_from: datetime, date_to: datetime) -> list[tuple]:
     '''
     Returns:
@@ -94,6 +109,7 @@ class LocalContext:
   
   def delete_reading(self, id: int):
     cur = self.connection.cursor()
+    LOG.info(f'Deleting reading id = {id}')
     sql = 'DELETE FROM readings WHERE id=?'
     cur.execute(sql, (id,))
     self.connection.commit()
@@ -101,8 +117,17 @@ class LocalContext:
 
   def delete_readings(self, id_list: list[int]):
     tuples = list(map(lambda id: (id,), id_list))
+    LOG.info(f'Deleting many readings')
     cur = self.connection.cursor()
     sql = 'DELETE FROM readings WHERE id=?'
     cur.executemany(sql, tuples)
     self.connection.commit()
+
+  def delete_all_readings(self):
+    cur = self.connection.cursor()
+    LOG.info(f'Deleting all readings')
+    sql = 'DELETE FROM readings'
+    cur.execute(sql)
+    self.connection.commit()
+
     

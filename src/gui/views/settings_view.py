@@ -497,10 +497,55 @@ class SettingsView:
     success = self.remote_context.export_to_remote(readings)
 
     if success:
-      info('Exported', 'Local data exported to remote database.')
+      info('Export', 'Local data exported to remote database.')
     else:
       error('Error', 'Error connecting to the database. Check your network connection.')
 
   def import_button_click(self):
-    error('Error', 'Not implemented')
+    if not yesno('Import', 'Are you sure you want to import data from the remote database?'):
+      return
+    
+    imported_readings = self.remote_context.import_from_remote()
+
+    if not imported_readings:
+      error('Error', 'Error connecting to the database. Check your network connection.')
+      return
+    
+    imported_readings_mapped = {}
+    for r in imported_readings:
+      imported_readings_mapped[str(r[0])] = r[:]
+
+    old_readings = self.db_context.fetch_all()
+    old_readings_mapped = {}
+    for r in old_readings:
+      old_readings_mapped[str(r[0])] = r[:]
+
+    new_reading_count = 0
+    old_reading_count = 0
+    changed_reading_count = 0
+    for rid in imported_readings_mapped:
+      if not rid in old_readings_mapped.keys():
+        new_reading_count += 1
+      elif old_readings_mapped[rid] == imported_readings_mapped[rid]:
+        old_reading_count += 1
+      else:
+        changed_reading_count += 1
+    missing_reading_count = len(old_readings) - old_reading_count - new_reading_count - changed_reading_count
+    
+    LOG.info(f'''
+      Importing successfull:
+        Old_reading_count = {old_reading_count}.
+        New_reading_count = {new_reading_count}.
+        Changed_reading_count = {changed_reading_count}.
+        Missing_reading_count = {missing_reading_count}.
+    ''')
+
+    if not yesno('Import', f'''
+Successfully imported {len(imported_readings)} readings. There are {len(old_readings)} readings in local db. Are you sure you want to overwrite local data?
+    '''):
+      return
+
+    LOG.info('Overwriting local data.')
+    self.db_context.delete_all_readings()
+    self.db_context.save_readings(imported_readings)
 
