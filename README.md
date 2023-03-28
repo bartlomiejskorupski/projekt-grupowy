@@ -19,7 +19,7 @@ sudo apt upgrade
 sudo mkdir -p /var/lib/sensormanager/logs
 sudo chmod -R 777 /var/lib/sensormanager /var/lib/sensormanager/logs
 
-sudo apt-get install python-dev libatlas-base-dev
+sudo apt-get install python-dev libatlas-base-dev libportaudio2
 pip install -r requirements.txt
 ```
 

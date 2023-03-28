@@ -2,6 +2,7 @@ from datetime import datetime
 from queue import Queue
 from threading import Thread, Event
 from src.model.app_event import AppEvent, AppEventType
+
 from src.misc.logger import getLogger
 LOG = getLogger(__name__)
 
@@ -13,7 +14,7 @@ except ModuleNotFoundError:
 
 class SensorReader(Thread):
   running: bool
-  e: Event
+  wait_event: Event
   reading_delay: float
 
   event_queue: Queue[AppEvent]
@@ -29,11 +30,12 @@ class SensorReader(Thread):
     self.sensor = DHT.DHT22
     self.pin = 12
     self.running = True
-    self.e = Event()
+    self.wait_event = Event()
     self.event_queue = event_queue
     self.reading_delay = reading_delay/1000.0
 
   def run(self):
+    LOG.info('Sensor thread started.')
     while True:
       LOG.info('Reading started...')
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_STARTED, {}))
@@ -60,14 +62,14 @@ class SensorReader(Thread):
         'datetime': dt_now
       }))
 
-      self.e.wait(self.reading_delay)
+      self.wait_event.wait(self.reading_delay)
       if not self.running:
         break
 
   def stop(self):
-    LOG.debug('Sensor thread stopping...')
+    LOG.info('Sensor thread stopping...')
     self.running = False
-    self.e.set()
+    self.wait_event.set()
 
   def is_valid_reading(self, humidity: float, temperature: float) -> bool:
     # Check if reading failed

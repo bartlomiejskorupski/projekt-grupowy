@@ -6,6 +6,7 @@ from src.gui.views.plot_view import PlotView
 from src.model.app_event import AppEvent, AppEventType
 from src.model.reading import Reading, ReadingType
 from src.sensor.sensor_reader import SensorReader
+from src.sensor.microphone_reader import MicrophoneReader
 from src.gui.views.home_view import HomeView
 from src.gui.menu.side_panel import SidePanel
 from src.gui.menu.top_panel import TopPanel
@@ -34,6 +35,7 @@ class MainWindow:
   """ Delay between readings in ms """
 
   sensor_thread: SensorReader
+  microphone_thread: MicrophoneReader
   QUEUE_PROCESSING_DELAY = 100
   event_queue: Queue[AppEvent]
   """ One-way event queue used for communicating with the SensorReader thread """
@@ -82,9 +84,11 @@ class MainWindow:
     # Initial plot update
     self.settings_view.update_plots()
 
-    # Initializing and starting the SensorReader thread
+    # Initializing and starting the reader threads
     self.sensor_thread = SensorReader(self.event_queue, self.READING_DELAY)
     self.sensor_thread.start()
+    self.microphone_thread = MicrophoneReader(self.event_queue, self.READING_DELAY)
+    self.microphone_thread.start()
 
   def open(self):
     self.app.display()
@@ -147,6 +151,7 @@ class MainWindow:
 
   def close_app(self):
     self.sensor_thread.stop()
+    self.microphone_thread.stop()
     LOG.debug('App closing')
     self.app.destroy()
 
