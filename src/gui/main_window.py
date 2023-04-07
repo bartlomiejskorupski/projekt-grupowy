@@ -31,7 +31,7 @@ class MainWindow:
   settings_view: SettingsView
   plot_view: PlotView
 
-  READING_DELAY = 60_000
+  READING_DELAY = 10_000
   """ Delay between readings in ms """
 
   sensor_thread: SensorReader
@@ -75,6 +75,7 @@ class MainWindow:
 
     # Initialize views
     self.home_view = HomeView(self)
+    self.home_view.update_reading_texts(None, None, self.READING_DELAY)
     self.settings_view = SettingsView(self)
     self.plot_view = PlotView(self)
 
@@ -103,7 +104,7 @@ class MainWindow:
         if e.event_type == AppEventType.SENSOR_READING_STARTED:
           self.home_view.reading_started()
         elif e.event_type == AppEventType.SENSOR_READING_FINISHED:
-          temp, humid, sound, date = e.data['temperature'], e.data['humidity'], e.data['sound'], e.data['datetime']
+          temp, humid, date = e.data['temperature'], e.data['humidity'], e.data['datetime']
           if temp is None:
             LOG.warning('Reading failed.')
           else:
@@ -111,7 +112,12 @@ class MainWindow:
             self.db_context.save_reading(Reading(date, temp, ReadingType.TEMPERATURE))
             LOG.debug(f'Measured humidity: {humid}')
             self.db_context.save_reading(Reading(date, humid, ReadingType.HUMIDITY))
-          self.home_view.update_reading_texts(temp, humid, sound, self.READING_DELAY)
+          self.home_view.update_reading_texts(temp, humid, self.READING_DELAY)
+        elif e.event_type == AppEventType.MICROPHONE_BIG_READING:
+          sound, date = e.data['sound'], e.data['datetime']
+          LOG.debug(f'Sound reading: {sound}')
+          self.db_context.save_reading(Reading(date, sound, ReadingType.SOUND))
+          self.home_view.update_sound_reading_text(sound)
       except Empty:
         LOG.debug('Queue is empty.')
     # Again start the process_queue method after a delay

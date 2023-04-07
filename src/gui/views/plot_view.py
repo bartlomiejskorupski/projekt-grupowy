@@ -105,6 +105,8 @@ class PlotView:
     LOG.debug(f'Updating sound plot')
     self.update_plot(ReadingType.SOUND)
 
+  # TODO: Add sound threshold line and scale plot y axis.
+
   def update_plot(self, reading_type: ReadingType):
     plot_title = ''
     plot_pic: Picture = None

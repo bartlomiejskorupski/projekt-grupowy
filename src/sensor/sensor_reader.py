@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 class SensorReader(Thread):
   running: bool
-  wait_event: Event
+  resume_event: Event
   reading_delay: float
 
   event_queue: Queue[AppEvent]
@@ -30,7 +30,7 @@ class SensorReader(Thread):
     self.sensor = DHT.DHT22
     self.pin = 12
     self.running = True
-    self.wait_event = Event()
+    self.resume_event = Event()
     self.event_queue = event_queue
     self.reading_delay = reading_delay/1000.0
 
@@ -38,6 +38,11 @@ class SensorReader(Thread):
     LOG.info('Sensor thread started.')
     while True:
       LOG.info('Reading started...')
+
+      self.resume_event.wait(self.reading_delay)
+      if not self.running:
+        break
+
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_STARTED, {}))
 
       # read_retry takes anywhere from 0 to 30 seconds to complete
@@ -58,18 +63,15 @@ class SensorReader(Thread):
       self.event_queue.put(AppEvent(AppEventType.SENSOR_READING_FINISHED, {
         'temperature': temperature,
         'humidity': humidity,
-        'sound': 0.0,
         'datetime': dt_now
       }))
-
-      self.wait_event.wait(self.reading_delay)
-      if not self.running:
-        break
+        
+    LOG.info('Sensor thread stopped.')
 
   def stop(self):
     LOG.info('Sensor thread stopping...')
     self.running = False
-    self.wait_event.set()
+    self.resume_event.set()
 
   def is_valid_reading(self, humidity: float, temperature: float) -> bool:
     # Check if reading failed

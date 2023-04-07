@@ -147,14 +147,17 @@ class HomeView:
     
     self.container.repeat(time=self.TIMER_UPDATE_DELAY, function=self.update_status)
 
-  def update_reading_texts(self, temperature, humidity, sound, next_reading_in):
+  def update_reading_texts(self, temperature, humidity, next_reading_in):
     if temperature is not None:
       self.temperature_text.value = f'{temperature:.2f}\u00B0C'
-    self.humidity_text.value = f'{humidity:.2f}%'
-    self.sound_text.value = f'{sound:.2f}dB'
+    if humidity is not None:
+      self.humidity_text.value = f'{humidity:.2f}%'
     self.is_reading = False
     self.timer = next_reading_in
     self.status_text.text_color = 'white'
+
+  def update_sound_reading_text(self, sound):
+    self.sound_text.value = f'{sound:.2f}'
 
   def update_status(self):
     if self.is_reading:
