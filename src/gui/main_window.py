@@ -31,7 +31,7 @@ class MainWindow:
   settings_view: SettingsView
   plot_view: PlotView
 
-  READING_DELAY = 10_000
+  READING_DELAY = env.READING_DELAY
   """ Delay between readings in ms """
 
   sensor_thread: SensorReader

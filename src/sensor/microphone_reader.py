@@ -2,6 +2,7 @@ from threading import Thread, Event
 from datetime import datetime
 from queue import Queue, Empty
 from src.model.app_event import AppEvent, AppEventType
+import env
 import sounddevice as sd
 import numpy as np
 
@@ -23,7 +24,7 @@ class MicrophoneReader(Thread):
   sample_delay: float
   ''' in seconds '''
 
-  THRESHOLD = 0.07
+  THRESHOLD = env.SOUND_THRESHOLD
   ''' If this sound threshold is crossed then big reading happens '''
   
   def __init__(self, event_queue: Queue, reading_delay: int):
@@ -73,6 +74,7 @@ class MicrophoneReader(Thread):
         # We take the max value from these discrete pressure points every 'sample_dalay' seconds
         # and add them to the small_reading_batch
         small_reading = max(max_vals)
+        print(small_reading)
         
         # Check if sound threshold was crossed
         threshold_crossed = False

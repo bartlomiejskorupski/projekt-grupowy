@@ -83,3 +83,5 @@ Options:
 - --full-screen - open in full screen mode
 - --project-path - set project path (changes path from relative to absolute for image loading)
 - --firebase-cert-path - absolute path to the firebase certificate file
+- --sound-threshold - sound detection threshold, float
+- --reading-delay - reading delay in ms
