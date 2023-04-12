@@ -15,7 +15,7 @@ PRODUCTION = '--prod' in sys.argv
 
 PROJECT_PATH = ''
 FIREBASE_CERTIFICATE_PATH = ''
-SOUND_THRESHOLD = 0.08
+SOUND_THRESHOLD = 70.0
 READING_DELAY = 60_000
 for arg in sys.argv:
     if arg.startswith('--project-path='):

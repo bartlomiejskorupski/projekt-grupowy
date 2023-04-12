@@ -5,6 +5,7 @@ from src.model.app_event import AppEvent, AppEventType
 import env
 import sounddevice as sd
 import numpy as np
+from math import log10
 
 from src.misc.logger import getLogger
 LOG = getLogger(__name__)
@@ -68,7 +69,7 @@ class MicrophoneReader(Thread):
           break
 
         small_reading = self.get_small_reading()
-        print('%.1f' % (small_reading*100.0))
+        print('%.1f' % (small_reading))
         
         # Check if sound threshold was crossed
         threshold_crossed, up, down = False, False, False
@@ -126,11 +127,15 @@ class MicrophoneReader(Thread):
       max_vals.append(max_val)
     # This gives us discrete sound pressure points
 
-    # We take the max value from these discrete pressure points every 'sample_dalay' seconds
-    # and add them to the small_reading_batch
-    if not max_vals:
-      return 0.0
-    return sum(max_vals)/len(max_vals)
+    p = 0.0
+    if max_vals:
+      p = max(max_vals)
+    
+    # Calculate decibells with the formula from this site:
+    # https://www.engineeringtoolbox.com/sound-pressure-d_711.html
+    p_ref = 2e-5
+    Lp = 20.0*log10(p/p_ref)
+    return Lp
 
   def calculate_big_reading(self):
     LOG.debug(f'Calculating big reading...')
