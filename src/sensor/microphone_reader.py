@@ -31,9 +31,9 @@ class MicrophoneReader(Thread):
   big_reading_beginning_time: datetime
 
   cooldown_start: datetime
-  COOLDOWN = 2.0
+  COOLDOWN = 3.0
   cooldown_activated: bool
-  ''' 2 second threshold cross cooldown '''
+  ''' threshold cross cooldown '''
 
   def __init__(self, event_queue: Queue, reading_delay: int):
     Thread.__init__(self)
@@ -44,7 +44,7 @@ class MicrophoneReader(Thread):
     self.spq = Queue()
     
     self.reading_delay = reading_delay/1000.0
-    self.sample_delay = 0.1
+    self.sample_delay = 0.2
 
     self.small_reading_batch = []
     self.big_reading_beginning_time = datetime.now()
@@ -68,7 +68,7 @@ class MicrophoneReader(Thread):
           break
 
         small_reading = self.get_small_reading()
-        LOG.debug(f'{small_reading:0.2f}')
+        print('%.1f' % (small_reading*100.0))
         
         # Check if sound threshold was crossed
         threshold_crossed, up, down = False, False, False
