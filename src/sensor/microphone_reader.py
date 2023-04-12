@@ -69,7 +69,7 @@ class MicrophoneReader(Thread):
           break
 
         small_reading = self.get_small_reading()
-        print('%.1f' % (small_reading))
+        # print('%.1f' % (small_reading))
         
         # Check if sound threshold was crossed
         threshold_crossed, up, down = False, False, False
@@ -82,11 +82,11 @@ class MicrophoneReader(Thread):
         if up and not self.cooldown_activated:
           do_big_reading = True
         elif threshold_crossed:
-          LOG.debug('Activating cooldown.')
+          # LOG.debug('Activating cooldown.')
           self.activate_cooldown()
 
         if self.cooldown_went_off():
-          LOG.debug('Cooldown went off.')
+          # LOG.debug('Cooldown went off.')
           do_big_reading = True
           self.clear_cooldown()
         

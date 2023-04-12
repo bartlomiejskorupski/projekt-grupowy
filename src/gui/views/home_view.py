@@ -157,7 +157,7 @@ class HomeView:
     self.status_text.text_color = 'white'
 
   def update_sound_reading_text(self, sound):
-    self.sound_text.value = f'{sound:.2f}'
+    self.sound_text.value = f'{sound:.2f}dB'
 
   def update_status(self):
     if self.is_reading:
