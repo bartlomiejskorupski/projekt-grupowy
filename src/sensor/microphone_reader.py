@@ -130,7 +130,7 @@ class MicrophoneReader(Thread):
     # and add them to the small_reading_batch
     if not max_vals:
       return 0.0
-    return max(max_vals)
+    return sum(max_vals)/len(max_vals)
 
   def calculate_big_reading(self):
     LOG.debug(f'Calculating big reading...')
