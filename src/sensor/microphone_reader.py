@@ -125,11 +125,15 @@ class MicrophoneReader(Thread):
       abs_data = list(map(lambda val: abs(val), data))
       max_val = max(abs_data)
       max_vals.append(max_val)
-    # This gives us discrete sound pressure points
+    # This gives us sound pressure points [Pa]
 
-    p = 0.0
-    if max_vals:
-      p = max(max_vals)
+    # Calculate effective sound pressure [Pa] from maximum pressure amplitude
+    p: float
+    try:
+      pa = max(max_vals)
+      p = pa/1.41421356237
+    except:
+      p = 0.0
     
     # Calculate decibells with the formula from this site:
     # https://www.engineeringtoolbox.com/sound-pressure-d_711.html
