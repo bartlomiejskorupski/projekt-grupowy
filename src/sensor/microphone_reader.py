@@ -128,6 +128,8 @@ class MicrophoneReader(Thread):
 
     # We take the max value from these discrete pressure points every 'sample_dalay' seconds
     # and add them to the small_reading_batch
+    if not max_vals:
+      return 0.0
     return max(max_vals)
 
   def calculate_big_reading(self):
