@@ -63,47 +63,49 @@ class MicrophoneReader(Thread):
       callback=self.audio_callback)
     with stream:
       while True:
+        try:
+          self.resume_event.wait(self.sample_delay)
+          if not self.running:
+            break
 
-        self.resume_event.wait(self.sample_delay)
-        if not self.running:
-          break
+          small_reading = self.get_small_reading()
+          # print('%.1f' % (small_reading))
+          
+          # Check if sound threshold was crossed
+          threshold_crossed, up, down = False, False, False
+          if self.small_reading_batch:
+            up, down = self.is_threshold_crossed(self.small_reading_batch[-1], small_reading)
+            threshold_crossed = up or down
 
-        small_reading = self.get_small_reading()
-        # print('%.1f' % (small_reading))
-        
-        # Check if sound threshold was crossed
-        threshold_crossed, up, down = False, False, False
-        if self.small_reading_batch:
-          up, down = self.is_threshold_crossed(self.small_reading_batch[-1], small_reading)
-          threshold_crossed = up or down
+          do_big_reading = False
 
-        do_big_reading = False
+          if up and not self.cooldown_activated:
+            do_big_reading = True
+          elif threshold_crossed:
+            # LOG.debug('Activating cooldown.')
+            self.activate_cooldown()
 
-        if up and not self.cooldown_activated:
-          do_big_reading = True
-        elif threshold_crossed:
-          # LOG.debug('Activating cooldown.')
-          self.activate_cooldown()
+          if self.cooldown_went_off():
+            # LOG.debug('Cooldown went off.')
+            do_big_reading = True
+            self.clear_cooldown()
+          
+          # If the threshold was not crossed then we need to add the last reading to the batch for processing``
+          if not threshold_crossed:
+            self.small_reading_batch.append(small_reading)
 
-        if self.cooldown_went_off():
-          # LOG.debug('Cooldown went off.')
-          do_big_reading = True
-          self.clear_cooldown()
-        
-        # If the threshold was not crossed then we need to add the last reading to the batch for processing``
-        if not threshold_crossed:
-          self.small_reading_batch.append(small_reading)
+          # Calculate time from beginning of big reading.
+          td = datetime.now() - self.big_reading_beginning_time 
 
-        # Calculate time from beginning of big reading.
-        td = datetime.now() - self.big_reading_beginning_time 
+          # Begin big reading if 'reading_delay' seconds passed or if small reading threshold was crossed
+          if td.total_seconds() >= self.reading_delay or do_big_reading: 
+            self.calculate_big_reading()
 
-        # Begin big reading if 'reading_delay' seconds passed or if small reading threshold was crossed
-        if td.total_seconds() >= self.reading_delay or do_big_reading: 
-          self.calculate_big_reading()
-
-        # If the threshold was crossed then we need to process the last reading in the next batch
-        if threshold_crossed:
-          self.small_reading_batch.append(small_reading)
+          # If the threshold was crossed then we need to process the last reading in the next batch
+          if threshold_crossed:
+            self.small_reading_batch.append(small_reading)
+        except Exception as e:
+          LOG.error(e)
 
     LOG.info('Mirophone thread stopped.')
     
