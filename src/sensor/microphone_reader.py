@@ -44,7 +44,8 @@ class MicrophoneReader(Thread):
     self.event_queue = event_queue
     self.spq = Queue()
     
-    self.reading_delay = reading_delay/1000.0
+    # self.reading_delay = reading_delay/1000.0
+    self.reading_delay = env.MICROPHONE_READING_DELAY/1000.0
     self.sample_delay = 0.2
 
     self.small_reading_batch = []

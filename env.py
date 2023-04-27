@@ -12,11 +12,12 @@ DEBUG_BORDER = '--debug-border' in sys.argv
 FULL_SCREEN = '--full-screen' in sys.argv
 PRODUCTION = '--prod' in sys.argv
 
+MICROPHONE_READING_DELAY = 60_000 * 60
 
 PROJECT_PATH = ''
 FIREBASE_CERTIFICATE_PATH = ''
 SOUND_THRESHOLD = 60.0
-READING_DELAY = 60_000
+READING_DELAY = 60_000 * 15
 for arg in sys.argv:
     if arg.startswith('--project-path='):
         PROJECT_PATH = arg[15:]
