@@ -306,6 +306,7 @@ class SettingsView:
       align='right',
       text='Test',
       command=self.test_button_click)
+    self.test_button.visible = False
     
     # Update record number text
     self.temp_number_text.value = self.db_context.readings_count(ReadingType.TEMPERATURE, self.temp_from_date, self.temp_to_date)

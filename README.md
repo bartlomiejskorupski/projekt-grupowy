@@ -69,7 +69,7 @@ In this file, add the following lines:
 [Desktop Entry]
 Type=Application
 Name=SensorManager
-Exec=/usr/bin/python3 /path/to/project/main.py --full-screen --project-path=/path/to/project --prod --firebase-cert-path=/path/to/firebase_cert.json
+Exec=/usr/bin/python3 /path/to/project/main.py --full-screen --project-path=/path/to/project --firebase-cert-path=/path/to/firebase_cert.json
 ```
 Reboot
 ## Usage
@@ -78,7 +78,6 @@ Running the application
 python3 main.py [options]
 ```
 Options:
-- --prod - production environment
 - --debug-border - show box borders
 - --full-screen - open in full screen mode
 - --project-path - set project path (changes path from relative to absolute for image loading)

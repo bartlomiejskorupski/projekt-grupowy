@@ -1,6 +1,6 @@
 import sys
 
-APP_VERSION = '1.3'
+APP_VERSION = '1.4'
 APP_NAME = 'SensorManager'
 DATA_FOLDER_PATH = '/var/lib/sensormanager'
 REMOTE_DATABASE_URL = 'https://sensormanager-9de90-default-rtdb.europe-west1.firebasedatabase.app/'
@@ -10,7 +10,6 @@ WINDOW_HEIGHT = 320
 
 DEBUG_BORDER = '--debug-border' in sys.argv
 FULL_SCREEN = '--full-screen' in sys.argv
-PRODUCTION = '--prod' in sys.argv
 
 MICROPHONE_READING_DELAY = 60_000 * 60
 

@@ -1,6 +1,6 @@
 import firebase_admin as fba
 from firebase_admin import db, credentials
-from env import REMOTE_DATABASE_URL, FIREBASE_CERTIFICATE_PATH, PRODUCTION
+from env import REMOTE_DATABASE_URL, FIREBASE_CERTIFICATE_PATH
 import json
 
 from src.misc.logger import getLogger
@@ -37,9 +37,6 @@ class RemoteContext:
     Returns:
       True if export was successfull or False if an error occurs during communication with remote database
     '''
-
-    # if not PRODUCTION:
-    #   return False
 
     if not self.fb_app:
       return False

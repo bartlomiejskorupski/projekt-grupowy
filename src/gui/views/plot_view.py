@@ -113,27 +113,30 @@ class PlotView:
     date_from = None
     date_to = None
     ylabel = ''
+    plot_style = ''
     if reading_type == ReadingType.TEMPERATURE:
       plot_title = 'Temperature'
       plot_pic = self.temp_plot_pic
       date_from = self.temp_from_date
       date_to = self.temp_to_date
       ylabel = '[\u00B0C]'
+      plot_style = 'r-'
     if reading_type == ReadingType.HUMIDITY:
       plot_title = 'Humidity'
       plot_pic = self.humid_plot_pic
       date_from = self.humid_from_date
       date_to = self.humid_to_date
       ylabel = '[%]'
+      plot_style = 'b-'
     if reading_type == ReadingType.SOUND:
       plot_title = 'Sound'
       plot_pic = self.sound_plot_pic
       date_from = self.sound_from_date
       date_to = self.sound_to_date
       ylabel = '[dB]'
+      plot_style = 'g-'
 
     readings = self.db_context.fetch_readings(reading_type, date_from, date_to)
-
     dates = []
     values = []
     if len(readings) > 0:
@@ -141,7 +144,11 @@ class PlotView:
       dates = [datetime.strptime(date_str, self.db_context.DATETIME_FORMAT) for date_str in date_strings]
     fig = plt.figure(facecolor='#222222')
     ax = plt.axes()
-    ax.plot(dates, values, 'g-', dates, values, 'r.')
+
+    ax.plot(dates, values, plot_style)
+
+    if reading_type == ReadingType.SOUND and values:
+      plt.ylim(min(values)-2, 80)
 
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
     plt.xlabel('Date')
